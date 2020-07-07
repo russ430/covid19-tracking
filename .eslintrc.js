@@ -22,10 +22,10 @@ module.exports = {
     'prettier/prettier': ['warn', {
       "endOfLine": "auto"
     }],
+    'no-unused-vars': 'warn',
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/forbid-prop-types': [0, { forbid: ['any'] }],
     'react/prop-types': 0,
-    'no-unused-vars': 'warn',
   },
   env: {
     jest: true,
