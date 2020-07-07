@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Provider } from 'react-redux';
 
+import configureStore from './redux/store/configureStore';
 import Header from './components/Header/Header';
 import Main from './components/Main/Main';
 
@@ -12,12 +14,18 @@ const Container = styled.div`
   padding: 1rem 2rem;
 `;
 
+const store = configureStore();
+
+// TODO: set up redux, finish writing tests
+
 function App() {
   return (
-    <Container>
-      <Header />
-      <Main />
-    </Container>
+    <Provider store={store}>
+      <Container>
+        <Header />
+        <Main />
+      </Container>
+    </Provider>
   );
 }
 
