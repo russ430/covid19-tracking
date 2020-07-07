@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+
+import { fetchAllStatesMeta } from '../../../redux/actions/actions';
 
 const Container = styled.div`
   flex: 1;
@@ -23,7 +26,7 @@ const States = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 0.5rem;
-  height: 500px;
+  height: 425px;
   overflow: auto;
 
   &::-webkit-scrollbar {
@@ -53,31 +56,32 @@ const State = styled.h3`
   margin: 0.5rem 0;
 `;
 
-export default function StateSidebar() {
+export function StatesSidebar({ states, getStates }) {
+  useEffect(() => {
+    getStates();
+  }, []);
+
   return (
     <Container>
       <Title>States/Territories</Title>
       <Line />
       <States>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
-        <State>Alabama</State>
+        {states ? (
+          states.map((state) => <State key={state.fips}>{state.name}</State>)
+        ) : (
+          <h2>Loading...</h2>
+        )}
       </States>
     </Container>
   );
 }
+
+const mapStateToProps = (state) => ({
+  states: state.states.meta,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getStates: () => dispatch(fetchAllStatesMeta()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(StatesSidebar);
