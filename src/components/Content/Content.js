@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import NumericalData from '../NumericalData/NumericalData';
+
 const Container = styled.section`
   padding: 0 0.5rem;
   margin: 0;
@@ -20,6 +22,10 @@ export default function Content() {
   return (
     <Container>
       <Title>Current Map and Case Count</Title>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <h1>Graph</h1>
+        <NumericalData />
+      </div>
     </Container>
   );
 }

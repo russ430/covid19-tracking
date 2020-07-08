@@ -8,12 +8,12 @@ export const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.GET_ALL_STATES_DATA_SUCCESS:
+    case types.GET_STATE_DATA_SUCCESS:
       return {
         ...state,
         data: action.data,
       };
-    case types.GET_ALL_STATES_DATA_FAILURE:
+    case types.GET_STATE_DATA_FAILURE:
       return {
         ...state,
         error: action.error,

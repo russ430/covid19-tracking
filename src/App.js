@@ -16,8 +16,6 @@ const Container = styled.div`
 
 const store = configureStore();
 
-// TODO: set up redux, finish writing tests
-
 function App() {
   return (
     <Provider store={store}>

@@ -2,17 +2,41 @@ import axios from 'axios';
 
 import * as types from '../constants/types';
 
-export const getAllStatesData = () => ({
-  type: types.GET_ALL_STATES_DATA,
+export const getCurrentUSDataTotals = () => ({
+  type: types.GET_CURRENT_US_DATA_TOTALS,
 });
 
-export const getAllStatesDataSuccess = (data) => ({
-  type: types.GET_ALL_STATES_DATA_SUCCESS,
+export const getCurrentUSDataTotalsSuccess = (data) => ({
+  type: types.GET_CURRENT_US_DATA_TOTALS_SUCCESS,
   data,
 });
 
-export const getAllStatesDataFailure = (error) => ({
-  type: types.GET_ALL_STATES_DATA_FAILURE,
+export const getCurrentUSDataTotalsFailure = (error) => ({
+  type: types.GET_CURRENT_US_DATA_TOTALS_FAILURE,
+  error,
+});
+
+export const getDailyUSDataTotalsSuccess = (data) => ({
+  type: types.GET_DAILY_US_DATA_TOTALS_SUCCESS,
+  data,
+});
+
+export const getDailyUSDataTotalsFailure = (error) => ({
+  type: types.GET_DAILY_US_DATA_TOTALS_FAILURE,
+  error,
+});
+
+export const getStateData = () => ({
+  type: types.GET_STATE_DATA,
+});
+
+export const getStateDataSuccess = (data) => ({
+  type: types.GET_STATE_DATA_SUCCESS,
+  data,
+});
+
+export const getStateDataFailure = (error) => ({
+  type: types.GET_STATE_DATA_FAILURE,
   error,
 });
 
@@ -36,13 +60,38 @@ export const fetchAllStatesMeta = () => {
     axios
       .get('https://covidtracking.com/api/v1/states/info.json')
       .then(({ data }) => {
-        console.log(data);
         const meta = [];
         data.forEach((state) => meta.push(state));
         dispatch(getAllStatesMetaSuccess(meta));
       })
       .catch((error) => {
         getAllStatesMetaFailure(error);
+      });
+  };
+};
+
+export const fetchCurrentUSDataTotals = () => {
+  return (dispatch) => {
+    axios
+      .get('https://covidtracking.com/api/v1/us/current.json')
+      .then(({ data }) => {
+        dispatch(getCurrentUSDataTotalsSuccess(data[0]));
+      })
+      .catch((error) => {
+        dispatch(getCurrentUSDataTotalsFailure(error));
+      });
+  };
+};
+
+export const fetchDailyUSDataTotals = () => {
+  return (dispatch) => {
+    axios
+      .get('https://covidtracking.com/api/v1/us/daily.json')
+      .then(({ data }) => {
+        dispatch(getDailyUSDataTotalsSuccess(data));
+      })
+      .catch((error) => {
+        dispatch(getDailyUSDataTotalsFailure(error));
       });
   };
 };
