@@ -2,7 +2,11 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import { fetchAllStatesMeta } from '../../../redux/actions/actions';
+import {
+  fetchAllStatesMeta,
+  selectState,
+  fetchDailyStateData,
+} from '../../../redux/actions/actions';
 
 const Container = styled.div`
   flex: 1;
@@ -50,16 +54,30 @@ const States = styled.div`
 `;
 
 const State = styled.h3`
-  font-size: 1rem;
+  font-size: ${(props) => (props.selected ? '1.2rem' : '1rem')};
   font-family: 'Open Sans', sans-serif;
   padding: 0;
   margin: 0.5rem 0;
+  cursor: pointer;
+  align-self: flex-start;
+  font-style: ${(props) => (props.selected ? 'italic' : null)};
 `;
 
-export function StatesSidebar({ states, getStates }) {
+export function StatesSidebar({
+  states,
+  getMeta,
+  selected,
+  setSelected,
+  getData,
+}) {
   useEffect(() => {
-    getStates();
+    getMeta();
   }, []);
+
+  const handleOnClick = (state) => {
+    setSelected(state);
+    getData(state);
+  };
 
   return (
     <Container>
@@ -67,10 +85,24 @@ export function StatesSidebar({ states, getStates }) {
       <Line />
       <States>
         {states ? (
-          states.map((state) => <State key={state.fips}>{state.name}</State>)
-        ) : (
-          <h2>Loading...</h2>
-        )}
+          <>
+            <State
+              selected={selected === 'all'}
+              onClick={() => setSelected('all')}
+            >
+              US Totals
+            </State>
+            {Object.keys(states).map((state) => (
+              <State
+                selected={selected === states[state].state}
+                key={states[state].fips}
+                onClick={() => handleOnClick(state)}
+              >
+                {states[state].name}
+              </State>
+            ))}
+          </>
+        ) : null}
       </States>
     </Container>
   );
@@ -78,10 +110,13 @@ export function StatesSidebar({ states, getStates }) {
 
 const mapStateToProps = (state) => ({
   states: state.states.meta,
+  selected: state.states.selected,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getStates: () => dispatch(fetchAllStatesMeta()),
+  getMeta: () => dispatch(fetchAllStatesMeta()),
+  getData: (state) => dispatch(fetchDailyStateData(state)),
+  setSelected: (state) => dispatch(selectState(state)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StatesSidebar);

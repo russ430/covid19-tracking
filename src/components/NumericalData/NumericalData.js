@@ -17,6 +17,10 @@ const Label = styled.h2`
   font-weight: 400;
   margin: 0;
   padding: 0;
+
+  &:not(:first-child) {
+    margin-top: 1rem;
+  }
 `;
 
 const Data = styled.h2`
@@ -27,18 +31,31 @@ const Data = styled.h2`
   padding: 0;
 `;
 
-export function NumericalData({ usTotals, getCurrent }) {
+export function NumericalData({
+  usTotals,
+  getUSTotals,
+  selectedState,
+  stateData,
+}) {
   useEffect(() => {
-    getCurrent();
+    getUSTotals();
   }, []);
 
   return (
     <Container>
-      {usTotals ? (
+      {stateData && selectedState !== 'all' && (
+        <>
+          <Label>TOTAL CASES:</Label>
+          <Data>{formatNumber(stateData[0].positive)}</Data>
+          <Label>TOTAL DEATHS:</Label>
+          <Data>{formatNumber(stateData[0].death)}</Data>
+        </>
+      )}
+      {usTotals && selectedState === 'all' ? (
         <>
           <Label>TOTAL CASES:</Label>
           <Data>{formatNumber(usTotals.positive)}</Data>
-          <Label style={{ marginTop: '1rem' }}>TOTAL DEATHS:</Label>
+          <Label>TOTAL DEATHS:</Label>
           <Data>{formatNumber(usTotals.death)}</Data>
         </>
       ) : null}
@@ -48,10 +65,13 @@ export function NumericalData({ usTotals, getCurrent }) {
 
 const mapStateToProps = (state) => ({
   usTotals: state.us.current,
+  stateData: state.states.data,
+  stateMeta: state.states.meta,
+  selectedState: state.states.selected,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getCurrent: () => dispatch(fetchCurrentUSDataTotals()),
+  getUSTotals: () => dispatch(fetchCurrentUSDataTotals()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NumericalData);

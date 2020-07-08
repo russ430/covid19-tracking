@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import parseMetaData from '../../utils/parseMetaData';
 import * as types from '../constants/types';
 
 export const getCurrentUSDataTotals = () => ({
@@ -54,14 +55,18 @@ export const getAllStatesMetaFailure = (error) => ({
   error,
 });
 
+export const selectState = (state) => ({
+  type: types.SELECT_STATE,
+  selected: state,
+});
+
 export const fetchAllStatesMeta = () => {
   return (dispatch) => {
     dispatch(getAllStatesMeta());
     axios
       .get('https://covidtracking.com/api/v1/states/info.json')
       .then(({ data }) => {
-        const meta = [];
-        data.forEach((state) => meta.push(state));
+        const meta = parseMetaData(data);
         dispatch(getAllStatesMetaSuccess(meta));
       })
       .catch((error) => {
@@ -93,5 +98,16 @@ export const fetchDailyUSDataTotals = () => {
       .catch((error) => {
         dispatch(getDailyUSDataTotalsFailure(error));
       });
+  };
+};
+
+export const fetchDailyStateData = (state) => {
+  return (dispatch) => {
+    axios
+      .get(`https://covidtracking.com/api/v1/states/${state}/daily.json`)
+      .then(({ data }) => {
+        dispatch(getStateDataSuccess(data));
+      })
+      .catch((error) => dispatch(getStateDataFailure(error)));
   };
 };
