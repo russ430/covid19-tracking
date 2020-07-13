@@ -3,8 +3,7 @@ export default function parseMetaData(data) {
   data.forEach((state) => {
     const abbreviation = state.state.toLowerCase();
     if (!meta[abbreviation]) {
-      meta[abbreviation] = { ...state };
-      meta[abbreviation].state = abbreviation;
+      meta[abbreviation] = { ...state, state: abbreviation };
     }
   });
   return meta;
