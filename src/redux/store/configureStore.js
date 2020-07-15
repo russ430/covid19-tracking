@@ -1,12 +1,14 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import usReducer from '../reducers/us';
-import statesReducer from '../reducers/states';
+import dataReducer from '../reducers/data';
+import metaReducer from '../reducers/meta';
+import selectedReducer from '../reducers/selected';
 
 const rootReducer = combineReducers({
-  us: usReducer,
-  states: statesReducer,
+  data: dataReducer,
+  meta: metaReducer,
+  selected: selectedReducer,
 });
 
 export default function configureStore() {
