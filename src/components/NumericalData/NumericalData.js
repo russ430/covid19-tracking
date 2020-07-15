@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import formatNumber from '../../utils/formatNumber';
-import { fetchCurrentUSDataTotals } from '../../redux/actions/actions';
 
 const Container = styled.div`
   display: flex;
@@ -31,47 +31,27 @@ const Data = styled.h2`
   padding: 0;
 `;
 
-export function NumericalData({
-  usTotals,
-  getUSTotals,
-  selectedState,
-  stateData,
-}) {
-  useEffect(() => {
-    getUSTotals();
-  }, []);
-
+export function NumericalData({ data }) {
   return (
     <Container>
-      {stateData && selectedState !== 'all' && (
-        <>
-          <Label>TOTAL CASES:</Label>
-          <Data>{formatNumber(stateData[0].positive)}</Data>
-          <Label>TOTAL DEATHS:</Label>
-          <Data>{formatNumber(stateData[0].death)}</Data>
-        </>
-      )}
-      {usTotals && selectedState === 'all' ? (
-        <>
-          <Label>TOTAL CASES:</Label>
-          <Data>{formatNumber(usTotals.positive)}</Data>
-          <Label>TOTAL DEATHS:</Label>
-          <Data>{formatNumber(usTotals.death)}</Data>
-        </>
-      ) : null}
+      <Label>TOTAL CASES:</Label>
+      <Data>{data ? formatNumber(data[data.length - 1].positive) : '-'}</Data>
+      <Label>TOTAL DEATHS:</Label>
+      <Data>{data ? formatNumber(data[data.length - 1].death) : '-'}</Data>
     </Container>
   );
 }
 
+NumericalData.defaultProps = {
+  data: [{}],
+};
+
+NumericalData.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object),
+};
+
 const mapStateToProps = (state) => ({
-  usTotals: state.us.current,
-  stateData: state.states.data,
-  stateMeta: state.states.meta,
-  selectedState: state.states.selected,
+  data: state.data.data,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  getUSTotals: () => dispatch(fetchCurrentUSDataTotals()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(NumericalData);
+export default connect(mapStateToProps)(NumericalData);

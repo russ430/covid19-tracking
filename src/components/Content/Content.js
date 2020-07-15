@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
+import Graph from '../Graph/Graph';
 import NumericalData from '../NumericalData/NumericalData';
 
 const Container = styled.section`
@@ -18,14 +21,34 @@ const Title = styled.h2`
   text-align: center;
 `;
 
-export default function Content() {
+export function Content({ meta, selectedState }) {
   return (
     <Container>
-      <Title>Current Map and Case Count</Title>
+      <Title>
+        {selectedState === 'all'
+          ? 'United States'
+          : meta.find((state) => state.state === selectedState).name}
+      </Title>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <h1>Graph</h1>
+        <Graph />
         <NumericalData />
       </div>
     </Container>
   );
 }
+
+Content.defaultProps = {
+  meta: [{}],
+};
+
+Content.propTypes = {
+  selectedState: PropTypes.string.isRequired,
+  meta: PropTypes.arrayOf(PropTypes.object),
+};
+
+const mapStateToProps = (state) => ({
+  selectedState: state.selected.selected,
+  meta: state.meta.meta,
+});
+
+export default connect(mapStateToProps)(Content);
