@@ -1,45 +1,8 @@
 import axios from 'axios';
 
 import parseMetaData from '../../utils/parseMetaData';
+import parseData from '../../utils/parseData';
 import * as types from '../constants/types';
-
-export const getCurrentUSDataTotals = () => ({
-  type: types.GET_CURRENT_US_DATA_TOTALS,
-});
-
-export const getCurrentUSDataTotalsSuccess = (data) => ({
-  type: types.GET_CURRENT_US_DATA_TOTALS_SUCCESS,
-  data,
-});
-
-export const getCurrentUSDataTotalsFailure = (error) => ({
-  type: types.GET_CURRENT_US_DATA_TOTALS_FAILURE,
-  error,
-});
-
-export const getDailyUSDataTotalsSuccess = (data) => ({
-  type: types.GET_DAILY_US_DATA_TOTALS_SUCCESS,
-  data,
-});
-
-export const getDailyUSDataTotalsFailure = (error) => ({
-  type: types.GET_DAILY_US_DATA_TOTALS_FAILURE,
-  error,
-});
-
-export const getStateData = () => ({
-  type: types.GET_STATE_DATA,
-});
-
-export const getStateDataSuccess = (data) => ({
-  type: types.GET_STATE_DATA_SUCCESS,
-  data,
-});
-
-export const getStateDataFailure = (error) => ({
-  type: types.GET_STATE_DATA_FAILURE,
-  error,
-});
 
 export const getAllStatesMeta = () => ({
   type: types.GET_ALL_STATES_META,
@@ -60,6 +23,20 @@ export const selectState = (state) => ({
   selected: state,
 });
 
+export const getDailyData = () => ({
+  type: types.GET_DAILY_DATA,
+})
+
+export const getDailyDataSuccess = (data) => ({
+  type: types.GET_DAILY_DATA_SUCCESS,
+  data,
+});
+
+export const getDailyDataFailure = (error) => ({
+  type: types.GET_DAILY_DATA_FAILURE,
+  error,
+});
+
 export const fetchAllStatesMeta = () => {
   return (dispatch) => {
     dispatch(getAllStatesMeta());
@@ -75,39 +52,25 @@ export const fetchAllStatesMeta = () => {
   };
 };
 
-export const fetchCurrentUSDataTotals = () => {
+export const fetchDailyData = (state) => {
+  let url;
+  if (state === 'all') {
+    url = 'https://covidtracking.com/api/v1/us/daily.json';
+  } else {
+    url = `https://covidtracking.com/api/v1/states/${state}/daily.json`;
+  }
   return (dispatch) => {
+    dispatch(getDailyData());
     axios
-      .get('https://covidtracking.com/api/v1/us/current.json')
+      .get(url)
       .then(({ data }) => {
-        dispatch(getCurrentUSDataTotalsSuccess(data[0]));
+        // move first dates to beginning of array
+        data.reverse();
+        const parsed = parseData(data);
+        dispatch(getDailyDataSuccess(parsed));
       })
       .catch((error) => {
-        dispatch(getCurrentUSDataTotalsFailure(error));
+        dispatch(getDailyDataFailure(error));
       });
-  };
-};
-
-export const fetchDailyUSDataTotals = () => {
-  return (dispatch) => {
-    axios
-      .get('https://covidtracking.com/api/v1/us/daily.json')
-      .then(({ data }) => {
-        dispatch(getDailyUSDataTotalsSuccess(data));
-      })
-      .catch((error) => {
-        dispatch(getDailyUSDataTotalsFailure(error));
-      });
-  };
-};
-
-export const fetchDailyStateData = (state) => {
-  return (dispatch) => {
-    axios
-      .get(`https://covidtracking.com/api/v1/states/${state}/daily.json`)
-      .then(({ data }) => {
-        dispatch(getStateDataSuccess(data));
-      })
-      .catch((error) => dispatch(getStateDataFailure(error)));
   };
 };
