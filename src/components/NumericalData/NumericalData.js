@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
-import formatNumber from '../../utils/formatNumber';
+import { format } from 'd3';
 
 const Container = styled.div`
   display: flex;
@@ -32,10 +31,13 @@ const Data = styled.h2`
 `;
 
 export function NumericalData({ data }) {
+  const formatNumber = format(',');
   return (
     <Container>
       <Label>TOTAL CASES:</Label>
-      <Data>{data ? formatNumber(data[data.length - 1].positive) : '-'}</Data>
+      <Data>
+        {data ? `${formatNumber(data[data.length - 1].positive)}` : '-'}
+      </Data>
       <Label>TOTAL DEATHS:</Label>
       <Data>{data ? formatNumber(data[data.length - 1].death) : '-'}</Data>
     </Container>
