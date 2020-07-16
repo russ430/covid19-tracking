@@ -2,20 +2,19 @@
 import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import * as d3 from 'd3';
-import { differenceInMonths, format } from 'date-fns';
+import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
-import formatNumber from '../../utils/formatNumber';
 import parseDate from '../../utils/parseDate';
 import { fetchDailyData } from '../../redux/actions/actions';
 
 export function Graph({ selectedState, getData, data }) {
+  const formatNumber = d3.format(',');
   const svgRef = useRef();
   const svg = d3.select(svgRef.current);
-  const margin = { top: 30, right: 0, bottom: 30, left: 60 };
-  const width = 400 - margin.right - margin.left;
-  const height = 250 - margin.top - margin.bottom;
-  const fromMarch = differenceInMonths(new Date(), new Date(2020, 2, 1));
+  const margin = { top: 40, right: 0, bottom: 30, left: 60 };
+  const width = 425 - margin.right - margin.left;
+  const height = 275 - margin.top - margin.bottom;
 
   const drawChart = () => {
     const barScale = d3
@@ -110,22 +109,106 @@ export function Graph({ selectedState, getData, data }) {
     const yAxis = (g) =>
       g
         .attr('transform', `translate(${margin.left},0)`)
-        .call(d3.axisLeft(yScale).ticks(3))
-        .call((g) => g.select('.domain').remove());
+        .call(
+          d3
+            .axisRight(yScale)
+            .tickSize(width - margin.left - margin.right)
+            .tickFormat(d3.format(','))
+            .ticks(2),
+        )
+        .call((g) => g.select('.domain').remove())
+        .call((g) =>
+          g
+            .selectAll('.tick:not(:first-of-type) line')
+            .attr('stroke-opacity', 0.2)
+            .attr('stroke-dasharray', '5,2')
+            .attr('x2', width - margin.left - margin.right),
+        )
+        .call((g) =>
+          g
+            .selectAll('.tick text')
+            .style('font-size', '0.8rem')
+            .attr('x', 4)
+            .attr('dy', -4),
+        );
 
     const xAxis = (g) =>
       g
         .attr('transform', `translate(0, ${height - margin.bottom})`)
-        .call(d3.axisBottom(xScale).ticks(fromMarch))
+        .call(d3.axisBottom(xScale).ticks(d3.timeMonth.every(1)))
         .call((g) => g.select('.domain').remove());
 
+    // add y axis and label
     svg.append('g').attr('class', 'y-axis').call(yAxis);
+    svg
+      .append('text')
+      .attr('class', 'y-axis-label')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 0 + margin.left - 30)
+      .attr('x', 0 - height / 2)
+      .attr('dy', '1em')
+      .style('text-anchor', 'middle')
+      .attr('font-size', '0.9rem')
+      .text('Number of Cases');
+
+    // add x axis and label
     svg.append('g').attr('class', 'x-axis').call(xAxis);
+
+    // add graph title
+    svg
+      .append('text')
+      .attr('class', 'graph-title')
+      .attr('x', (width + margin.left) / 2)
+      .attr('y', margin.top - 25)
+      .attr('text-anchor', 'middle')
+      .text('Number of New Cases over Time');
+
+    // add legend
+    svg
+      .append('circle')
+      .attr('class', 'legend-circle')
+      .attr('cx', margin.left)
+      .attr('cy', height + margin.bottom - 15)
+      .attr('r', 7)
+      .style('fill', 'steelblue');
+
+    svg
+      .append('text')
+      .attr('class', 'legend-text')
+      .attr('x', margin.left + 13)
+      .attr('y', height + margin.bottom - 15)
+      .text('7 Day Average')
+      .style('font-size', '0.9rem')
+      .attr('text-anchor', 'left')
+      .style('alignment-baseline', 'middle');
+
+    svg
+      .append('circle')
+      .attr('class', 'legend-circle')
+      .attr('cx', margin.left + 140)
+      .attr('cy', height + margin.bottom - 15)
+      .attr('r', 7)
+      .style('fill', 'lightblue');
+
+    svg
+      .append('text')
+      .attr('class', 'legend-text')
+      .attr('x', margin.left + 153)
+      .attr('y', height + margin.bottom - 15)
+      .text('New Cases')
+      .style('font-size', '0.9rem')
+      .attr('text-anchor', 'left')
+      .style('alignment-baseline', 'middle');
   };
 
   const clearSVG = () => {
     svg.select('.y-axis').remove();
     svg.select('.x-axis').remove();
+    svg.select('.y-axis-label').remove();
+    svg.select('.x-axis-label').remove();
+    svg.select('.graph-title').remove();
+    svg.selectAll('.legend-circle').remove();
+    svg.selectAll('.legend-text').remove();
     svg.selectAll('path').remove();
   };
 
