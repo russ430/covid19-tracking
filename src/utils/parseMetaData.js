@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 export default function parseMetaData(data) {
-  const meta = data.filter((state) => state.name !== 'American Samoa');
+  const meta = [...data];
   meta.forEach((state) => {
     state.state = state.state.toLowerCase();
   });
