@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Loader from '../Loader/Loader';
 import Graph from '../Graph/Graph';
 import NumericalData from '../NumericalData/NumericalData';
 
@@ -21,7 +22,12 @@ const Title = styled.h2`
   text-align: center;
 `;
 
-export function Content({ meta, selectedState }) {
+const Load = styled.div`
+  height: 1.6em;
+  margin-top: 0.5rem;
+`;
+
+export function Content({ isFetching, meta, selectedState }) {
   return (
     <Container>
       <Title>
@@ -29,6 +35,7 @@ export function Content({ meta, selectedState }) {
           ? 'United States'
           : meta.find((state) => state.state === selectedState).name}
       </Title>
+      <Load>{isFetching && <Loader />}</Load>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Graph />
         <NumericalData />
@@ -49,6 +56,7 @@ Content.propTypes = {
 const mapStateToProps = (state) => ({
   selectedState: state.selected.selected,
   meta: state.meta.meta,
+  isFetching: state.data.isFetching,
 });
 
 export default connect(mapStateToProps)(Content);
