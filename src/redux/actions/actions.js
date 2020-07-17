@@ -37,6 +37,11 @@ export const getDailyDataFailure = (error) => ({
   error,
 });
 
+export const setLastUpdated = (time) => ({
+  type: types.SET_LAST_UPDATED,
+  time,
+});
+
 export const fetchAllStatesMeta = () => {
   return (dispatch) => {
     dispatch(getAllStatesMeta());
@@ -68,6 +73,7 @@ export const fetchDailyData = (state) => {
         data.reverse();
         const parsed = parseData(data);
         dispatch(getDailyDataSuccess(parsed));
+        dispatch(setLastUpdated(parsed[parsed.length - 1].lastUpdated));
       })
       .catch((error) => {
         dispatch(getDailyDataFailure(error));

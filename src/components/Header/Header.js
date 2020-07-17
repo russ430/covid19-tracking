@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { format } from 'date-fns';
 
 const Container = styled.header`
   text-align: center;
@@ -26,11 +28,17 @@ const UpdatedAt = styled.h2`
   padding: 0.5rem 0;
 `;
 
-export default function Header() {
+export function Header({ lastUpdated }) {
   return (
     <Container>
       <Title>Coronavirus in the US</Title>
-      <UpdatedAt>Last Updated: July 6, 2020 3:52 PM</UpdatedAt>
+      <UpdatedAt>Last Updated: {lastUpdated && format(new Date(lastUpdated), 'PPPp')}</UpdatedAt>
     </Container>
   );
 }
+
+const mapStateToProps = (state) => ({
+  lastUpdated: state.data.lastUpdated,
+})
+
+export default connect(mapStateToProps)(Header);

@@ -27,6 +27,11 @@ const reducer = (state = initialState, action) => {
         error: action.error,
         isFetching: false,
       };
+    case types.SET_LAST_UPDATED:
+      return {
+        ...state,
+        lastUpdated: action.time,
+      };
     default:
       return state;
   }
