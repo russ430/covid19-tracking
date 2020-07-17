@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { format } from 'date-fns';
@@ -32,13 +32,15 @@ export function Header({ lastUpdated }) {
   return (
     <Container>
       <Title>Coronavirus in the US</Title>
-      <UpdatedAt>Last Updated: {lastUpdated && format(new Date(lastUpdated), 'PPPp')}</UpdatedAt>
+      <UpdatedAt>
+        Last Updated: {lastUpdated && format(new Date(lastUpdated), 'PPPp')}
+      </UpdatedAt>
     </Container>
   );
 }
 
 const mapStateToProps = (state) => ({
   lastUpdated: state.data.lastUpdated,
-})
+});
 
 export default connect(mapStateToProps)(Header);

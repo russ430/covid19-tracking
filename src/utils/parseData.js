@@ -23,8 +23,7 @@ export default function parseData(data) {
       deaths: singleDay.death,
       totalCases: singleDay.positive,
       date: parseDate(singleDay.date),
-      lastUpdated:
-        singleDay.lastModified || singleDay.lastUpdateEt,
+      lastUpdated: singleDay.lastModified || singleDay.lastUpdateEt,
     };
     return day;
   });
