@@ -1,18 +1,30 @@
+import parseDate from './parseDate';
+
 export default function parseData(data) {
-  const casesSum = [];
-  const reducer = (accumulator, current) => accumulator + current;
-  let avgCases7Days;
-  const parsed = data.map((obj) => {
+  const previous7DaysOfCases = [];
+  const sumReducer = (accumulator, current) => accumulator + current;
+
+  const parsed = data.map((singleDay) => {
     // calculate 7 day average
-    casesSum.push(obj.positiveIncrease);
-    if (casesSum.length > 7) {
-      casesSum.shift();
-      const total = casesSum.reduce(reducer);
-      avgCases7Days = (total / 7).toFixed(0);
+    let avgCases7Days;
+    previous7DaysOfCases.push(singleDay.positiveIncrease);
+    if (previous7DaysOfCases.length > 7) {
+      previous7DaysOfCases.shift();
+      const total = previous7DaysOfCases.reduce(sumReducer);
+      avgCases7Days = Math.ceil(total / 7);
     } else {
-      avgCases7Days = Math.ceil(casesSum.reduce(reducer) / casesSum.length);
+      avgCases7Days = Math.ceil(
+        previous7DaysOfCases.reduce(sumReducer) / previous7DaysOfCases.length,
+      );
     }
-    return { ...obj, avgCases7Days };
+    const day = {
+      avgCases7Days,
+      newCases: singleDay.positiveIncrease,
+      deaths: singleDay.death,
+      totalCases: singleDay.positive,
+      date: parseDate(singleDay.date),
+    };
+    return day;
   });
   return parsed;
 }

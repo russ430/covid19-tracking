@@ -36,10 +36,10 @@ export function NumericalData({ data }) {
     <Container>
       <Label>TOTAL CASES:</Label>
       <Data>
-        {data ? `${formatNumber(data[data.length - 1].positive)}` : '-'}
+        {data ? `${formatNumber(data[data.length - 1].totalCases)}` : '-'}
       </Data>
       <Label>TOTAL DEATHS:</Label>
-      <Data>{data ? formatNumber(data[data.length - 1].death) : '-'}</Data>
+      <Data>{data ? formatNumber(data[data.length - 1].deaths) : '-'}</Data>
     </Container>
   );
 }

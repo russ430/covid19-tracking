@@ -5,7 +5,6 @@ import * as d3 from 'd3';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
-import parseDate from '../../utils/parseDate';
 import { fetchDailyData } from '../../redux/actions/actions';
 
 export function Graph({ selectedState, getData, data }) {
@@ -25,13 +24,13 @@ export function Graph({ selectedState, getData, data }) {
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.positiveIncrease)])
+      .domain([0, d3.max(data, (d) => d.newCases)])
       .range([height - margin.bottom, margin.top])
       .nice();
 
     const xScale = d3
       .scaleTime()
-      .domain(d3.extent(data, (d) => parseDate(d.date)))
+      .domain(d3.extent(data, (d) => d.date))
       .range([margin.left, width - margin.right]);
 
     // create bars
@@ -45,7 +44,7 @@ export function Graph({ selectedState, getData, data }) {
       .attr('width', barScale.bandwidth())
       .style('fill', 'lightblue')
       .transition()
-      .attr('height', (d) => yScale(0) - yScale(d.positiveIncrease));
+      .attr('height', (d) => yScale(0) - yScale(d.newCases));
 
     const tooltip = d3
       .select('body')
@@ -66,9 +65,9 @@ export function Graph({ selectedState, getData, data }) {
       .on('mouseover', (d) => {
         tooltip
           .html(
-            `<div>${format(new Date(parseDate(d.date)), 'MMMM do')}</div>
+            `<div>${format(new Date(d.date), 'MMMM do')}</div>
             <div>Cases: ${formatNumber(
-              d.positiveIncrease,
+              d.newCases,
             )}</div><div>7 Day Avg: ${formatNumber(d.avgCases7Days)}</div>`,
           )
           .style('visibility', 'visible');
@@ -84,7 +83,7 @@ export function Graph({ selectedState, getData, data }) {
 
     const line = d3
       .line()
-      .x((d) => xScale(parseDate(d.date)))
+      .x((d) => xScale(d.date))
       .y((d) => yScale(d.avgCases7Days));
 
     const path = svg
