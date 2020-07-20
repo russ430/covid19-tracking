@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import ResourcePlaceholder from '../../PlaceHolders/ResourcePlaceholder';
 import Article from '../../Article/Article';
 import { fetchResources } from '../../../redux/actions/actions';
 
@@ -49,10 +50,12 @@ const Articles = styled.div`
   }
 `;
 
-export function NewsSidebar({ getResources, resources }) {
+export function ResourceSidebar({ getResources, resources }) {
   useEffect(() => {
     getResources();
   }, []);
+
+  const dummy = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
   return (
     <Container>
@@ -63,17 +66,19 @@ export function NewsSidebar({ getResources, resources }) {
           ? resources.map((article) => (
               <Article data={article} key={article.title} />
             ))
-          : null}
+          : (
+            dummy.map(() => <ResourcePlaceholder />)
+          )}
       </Articles>
     </Container>
   );
 }
 
-NewsSidebar.defaultProps = {
+ResourceSidebar.defaultProps = {
   resources: null,
 };
 
-NewsSidebar.propTypes = {
+ResourceSidebar.propTypes = {
   resources: PropTypes.arrayOf(PropTypes.object),
   getResources: PropTypes.func.isRequired,
 };
@@ -86,4 +91,4 @@ const mapDispatchToProps = (dispatch) => ({
   getResources: () => dispatch(fetchResources()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewsSidebar);
+export default connect(mapStateToProps, mapDispatchToProps)(ResourceSidebar);

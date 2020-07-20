@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import StateSidebar from '../Sidebars/States/StatesSidebar';
 import Content from '../Content/Content';
-import NewsSidebar from '../Sidebars/News/NewsSidebar';
+import ResourcesSidebar from '../Sidebars/Resources/ResourcesSidebar';
 
 const Container = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ export default function Main() {
     <Container>
       <StateSidebar />
       <Content />
-      <NewsSidebar />
+      <ResourcesSidebar />
     </Container>
   );
 }
