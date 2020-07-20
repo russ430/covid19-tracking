@@ -13,11 +13,16 @@ import {
 const GRAPHHEIGHT = 275;
 const GRAPHWIDTH = 425;
 
-export function Graph({ selectedState, fetchData, data, setDataFromCache }) {
+export function NewCasesGraph({
+  selectedState,
+  fetchData,
+  data,
+  setDataFromCache,
+}) {
   const formatNumber = d3.format(',');
   const svgRef = useRef();
   const svg = d3.select(svgRef.current);
-  const margin = { top: 20, right: 0, bottom: 30, left: 10 };
+  const margin = { top: 20, right: 10, bottom: 30, left: 20 };
   const width = GRAPHWIDTH - margin.right - margin.left;
   const height = GRAPHHEIGHT - margin.top - margin.bottom;
 
@@ -52,6 +57,7 @@ export function Graph({ selectedState, fetchData, data, setDataFromCache }) {
       .transition()
       .attr('height', (d) => yScale(0) - yScale(d.newCases));
 
+    // create tooltip
     const tooltip = d3
       .select('body')
       .append('div')
@@ -65,16 +71,15 @@ export function Graph({ selectedState, fetchData, data, setDataFromCache }) {
       .style('border', '1px solid #ddd')
       .text('a simple tooltip');
 
-    // show tooltip when bars are hovered
+    // show tooltip when bars are hovered over with mouse
     svg
       .selectAll('rect')
       .on('mouseover', (d) => {
         tooltip
           .html(
             `<div>${format(new Date(d.date), 'MMMM do')}</div>
-            <div>Cases: ${formatNumber(
-              d.newCases,
-            )}</div><div>7 Day Avg: ${formatNumber(d.avgCases7Days)}</div>`,
+             <div>Cases: ${formatNumber(d.newCases)}</div>
+             <div>7 Day Avg: ${formatNumber(d.avgCases7Days)}</div>`,
           )
           .style('visibility', 'visible');
       })
@@ -92,6 +97,7 @@ export function Graph({ selectedState, fetchData, data, setDataFromCache }) {
       .x((d) => xScale(new Date(d.date)))
       .y((d) => yScale(+d.avgCases7Days));
 
+    // create line based on 7 day avg
     const path = svg
       .append('path')
       .datum(data)
@@ -100,9 +106,8 @@ export function Graph({ selectedState, fetchData, data, setDataFromCache }) {
       .attr('stroke', 'steelblue')
       .attr('stroke-width', 3);
 
-    const length = path.node().getTotalLength();
-
     // animate line
+    const length = path.node().getTotalLength();
     path
       .attr('stroke-dasharray', `${length} ${length}`)
       .attr('stroke-dashoffset', length)
@@ -149,7 +154,7 @@ export function Graph({ selectedState, fetchData, data, setDataFromCache }) {
       .append('text')
       .attr('class', 'y-axis-label')
       .attr('transform', 'rotate(-90)')
-      .attr('y', 0 + margin.left - 30)
+      .attr('y', margin.left - 20)
       .attr('x', 0 - height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
@@ -167,7 +172,10 @@ export function Graph({ selectedState, fetchData, data, setDataFromCache }) {
       .attr('x', (width + margin.left) / 2)
       .attr('y', margin.top - 5)
       .attr('text-anchor', 'middle')
-      .text('Number of New Cases over Time');
+      .style('font-weight', '700')
+      .style('font-size', '1.2rem')
+      .style('font-family', 'Open Sans, serif')
+      .text('New reported cases by day');
 
     // add legend
     svg
@@ -247,11 +255,11 @@ export function Graph({ selectedState, fetchData, data, setDataFromCache }) {
   );
 }
 
-Graph.defaultProps = {
+NewCasesGraph.defaultProps = {
   data: [{}],
 };
 
-Graph.propTypes = {
+NewCasesGraph.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
   selectedState: PropTypes.string.isRequired,
   fetchData: PropTypes.func.isRequired,
@@ -268,4 +276,4 @@ const mapDispatchToProps = (dispatch) => ({
   setDataFromCache: (data) => dispatch(getDailyDataSuccess(data)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Graph);
+export default connect(mapStateToProps, mapDispatchToProps)(NewCasesGraph);

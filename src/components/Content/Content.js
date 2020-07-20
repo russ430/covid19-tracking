@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Loader from '../Loader/Loader';
-import Graph from '../Graph/Graph';
+import NewCasesGraph from '../Graphs/NewCasesGraph';
 import NumericalData from '../NumericalData/NumericalData';
 
 const Container = styled.section`
@@ -37,7 +37,7 @@ export function Content({ isFetching, meta, selectedState }) {
       </Title>
       <Load>{isFetching && <Loader />}</Load>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Graph />
+        <NewCasesGraph />
         <NumericalData />
       </div>
     </Container>

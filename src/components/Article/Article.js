@@ -13,7 +13,7 @@ const Container = styled.div`
 `;
 
 const Title = styled.a`
-  font-family: 'Merriweather', serif;
+  font-family: 'Open Sans', sans-serif;
   color: #000;
   font-size: 1.1rem;
   font-weight: 700;
