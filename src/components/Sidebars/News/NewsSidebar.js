@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+import Article from '../../Article/Article';
+import { fetchResources } from '../../../redux/actions/actions';
 
 const Container = styled.div`
-  flex: 1;
+  flex: 1.5;
 `;
 
 const Title = styled.h2`
@@ -21,58 +26,64 @@ const Line = styled.div`
 
 const Articles = styled.div`
   padding: 0 0.5rem;
-`;
+  height: 425px;
+  overflow: auto;
 
-const Article = styled.div`
-  margin: 0.5rem 0;
-  padding: 0.5rem 0;
-
-  &:not(:first-child) {
-    border-top: 1px solid #e7e7e7;
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  &::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, 0.9);
   }
 `;
 
-const ATitle = styled.h3`
-  font-family: 'Merriweather', serif,
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0.5rem 0 0.2rem 0;
-  padding: 0;
-`;
+export function NewsSidebar({ getResources, resources }) {
+  useEffect(() => {
+    getResources();
+  }, []);
 
-const ABody = styled.p`
-  font-family: 'Open Sans', sans-serif;
-  font-size: 1rem;
-  font-style: italic;
-  margin: 0;
-  padding: 0;
-`;
-
-export default function NewsSidebar() {
   return (
     <Container>
-      <Title>News</Title>
+      <Title>CDC Resources</Title>
       <Line />
       <Articles>
-        <Article>
-          <ATitle>Headline</ATitle>
-          <ABody>
-            Lorem ipsum dolor this is the body of an news article headline
-          </ABody>
-        </Article>
-        <Article>
-          <ATitle>Headline</ATitle>
-          <ABody>
-            Lorem ipsum dolor this is the body of an news article headline
-          </ABody>
-        </Article>
-        <Article>
-          <ATitle>Headline</ATitle>
-          <ABody>
-            Lorem ipsum dolor this is the body of an news article headline
-          </ABody>
-        </Article>
+        {resources
+          ? resources.map((article) => (
+              <Article data={article} key={article.title} />
+            ))
+          : null}
       </Articles>
     </Container>
   );
 }
+
+NewsSidebar.defaultProps = {
+  resources: null,
+};
+
+NewsSidebar.propTypes = {
+  resources: PropTypes.arrayOf(PropTypes.object),
+  getResources: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  resources: state.resources.resources,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getResources: () => dispatch(fetchResources()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewsSidebar);
