@@ -7,13 +7,16 @@ import PropTypes from 'prop-types';
 
 import { fetchDailyData } from '../../redux/actions/actions';
 
+const GRAPHHEIGHT = 275;
+const GRAPHWIDTH = 425;
+
 export function Graph({ selectedState, getData, data }) {
   const formatNumber = d3.format(',');
   const svgRef = useRef();
   const svg = d3.select(svgRef.current);
-  const margin = { top: 40, right: 0, bottom: 30, left: 60 };
-  const width = 425 - margin.right - margin.left;
-  const height = 275 - margin.top - margin.bottom;
+  const margin = { top: 20, right: 0, bottom: 30, left: 10 };
+  const width = GRAPHWIDTH - margin.right - margin.left;
+  const height = GRAPHHEIGHT - margin.top - margin.bottom;
 
   const drawChart = () => {
     const barScale = d3
@@ -105,7 +108,7 @@ export function Graph({ selectedState, getData, data }) {
       .duration(1000)
       .attr('stroke-dashoffset', 0);
 
-    const yAxis = (g) =>
+    const createYAxis = (g) =>
       g
         .attr('transform', `translate(${margin.left},0)`)
         .call(
@@ -131,14 +134,14 @@ export function Graph({ selectedState, getData, data }) {
             .attr('dy', -4),
         );
 
-    const xAxis = (g) =>
+    const createXAxis = (g) =>
       g
         .attr('transform', `translate(0, ${height - margin.bottom})`)
         .call(d3.axisBottom(xScale).ticks(d3.timeMonth.every(1)))
         .call((g) => g.select('.domain').remove());
 
     // add y axis and label
-    svg.append('g').attr('class', 'y-axis').call(yAxis);
+    svg.append('g').attr('class', 'y-axis').call(createYAxis);
     svg
       .append('text')
       .attr('class', 'y-axis-label')
@@ -151,14 +154,15 @@ export function Graph({ selectedState, getData, data }) {
       .text('Number of Cases');
 
     // add x axis and label
-    svg.append('g').attr('class', 'x-axis').call(xAxis);
+    const xAxis = svg.append('g').attr('class', 'x-axis').call(createXAxis);
+    xAxis.selectAll('.tick', 'text').style('font-size', '0.8rem');
 
     // add graph title
     svg
       .append('text')
       .attr('class', 'graph-title')
       .attr('x', (width + margin.left) / 2)
-      .attr('y', margin.top - 25)
+      .attr('y', margin.top - 5)
       .attr('text-anchor', 'middle')
       .text('Number of New Cases over Time');
 
@@ -224,7 +228,7 @@ export function Graph({ selectedState, getData, data }) {
 
   return (
     <div style={{ margin: '1rem' }}>
-      <svg width={400} height={250} ref={svgRef} className="svg" />
+      <svg width={GRAPHWIDTH} height={GRAPHHEIGHT} ref={svgRef} className="svg" />
     </div>
   );
 }

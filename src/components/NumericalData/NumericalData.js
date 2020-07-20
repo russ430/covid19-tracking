@@ -7,7 +7,7 @@ import { format } from 'd3';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 2rem 1rem;
+  margin: 3rem 0rem;
 `;
 
 const Label = styled.h2`
