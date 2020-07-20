@@ -5,12 +5,15 @@ import * as d3 from 'd3';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
-import { fetchDailyData } from '../../redux/actions/actions';
+import {
+  fetchDailyData,
+  getDailyDataSuccess,
+} from '../../redux/actions/actions';
 
 const GRAPHHEIGHT = 275;
 const GRAPHWIDTH = 425;
 
-export function Graph({ selectedState, getData, data }) {
+export function Graph({ selectedState, fetchData, data, setDataFromCache }) {
   const formatNumber = d3.format(',');
   const svgRef = useRef();
   const svg = d3.select(svgRef.current);
@@ -33,7 +36,7 @@ export function Graph({ selectedState, getData, data }) {
 
     const xScale = d3
       .scaleTime()
-      .domain(d3.extent(data, (d) => d.date))
+      .domain(d3.extent(data, (d) => new Date(d.date)))
       .range([margin.left, width - margin.right]);
 
     // create bars
@@ -86,8 +89,8 @@ export function Graph({ selectedState, getData, data }) {
 
     const line = d3
       .line()
-      .x((d) => xScale(d.date))
-      .y((d) => yScale(d.avgCases7Days));
+      .x((d) => xScale(new Date(d.date)))
+      .y((d) => yScale(+d.avgCases7Days));
 
     const path = svg
       .append('path')
@@ -216,11 +219,17 @@ export function Graph({ selectedState, getData, data }) {
   };
 
   useEffect(() => {
-    getData(selectedState);
+    const cachedData = sessionStorage.getItem(selectedState);
+    if (cachedData) {
+      setDataFromCache(JSON.parse(cachedData));
+    } else {
+      fetchData(selectedState);
+    }
   }, [selectedState]);
 
   useEffect(() => {
     if (data) {
+      sessionStorage.setItem(selectedState, JSON.stringify(data));
       drawChart();
     }
     return () => clearSVG();
@@ -228,7 +237,12 @@ export function Graph({ selectedState, getData, data }) {
 
   return (
     <div style={{ margin: '1rem' }}>
-      <svg width={GRAPHWIDTH} height={GRAPHHEIGHT} ref={svgRef} className="svg" />
+      <svg
+        width={GRAPHWIDTH}
+        height={GRAPHHEIGHT}
+        ref={svgRef}
+        className="svg"
+      />
     </div>
   );
 }
@@ -240,7 +254,8 @@ Graph.defaultProps = {
 Graph.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
   selectedState: PropTypes.string.isRequired,
-  getData: PropTypes.func.isRequired,
+  fetchData: PropTypes.func.isRequired,
+  setDataFromCache: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -249,7 +264,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getData: (state) => dispatch(fetchDailyData(state)),
+  fetchData: (state) => dispatch(fetchDailyData(state)),
+  setDataFromCache: (data) => dispatch(getDailyDataSuccess(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Graph);
