@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import dummyStates from '../../../utils/dummyVariables/statesPlaceholders';
 import getRandomInt from '../../../utils/getRandomInt';
 import {
   fetchAllStatesMeta,
@@ -65,8 +66,6 @@ const State = styled.h3`
   font-style: ${(props) => (props.selected ? 'italic' : null)};
 `;
 
-const dummy = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1 ,1 , 1];
-
 export function StatesSidebar({ states, getMeta, selected, setSelected }) {
   useEffect(() => {
     getMeta();
@@ -100,7 +99,9 @@ export function StatesSidebar({ states, getMeta, selected, setSelected }) {
             ))}
           </>
         ) : (
-          dummy.map(() => <StatesPlaceholder width={getRandomInt(75, 135)} />)
+          dummyStates.map(() => (
+            <StatesPlaceholder width={getRandomInt(75, 135)} />
+          ))
         )}
       </States>
     </Container>

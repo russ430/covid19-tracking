@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import dummyPlaceholders from '../../../utils/dummyVariables/resourcesPlaceholders';
 import ResourcePlaceholder from '../../PlaceHolders/ResourcePlaceholder';
 import Article from '../../Article/Article';
 import { fetchResources } from '../../../redux/actions/actions';
@@ -55,8 +56,6 @@ export function ResourceSidebar({ getResources, resources }) {
     getResources();
   }, []);
 
-  const dummy = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-
   return (
     <Container>
       <Title>CDC Resources</Title>
@@ -66,9 +65,7 @@ export function ResourceSidebar({ getResources, resources }) {
           ? resources.map((article) => (
               <Article data={article} key={article.title} />
             ))
-          : (
-            dummy.map(() => <ResourcePlaceholder />)
-          )}
+          : dummyPlaceholders.map(() => <ResourcePlaceholder />)}
       </Articles>
     </Container>
   );
