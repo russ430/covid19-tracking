@@ -31,7 +31,7 @@ const UpdatedAt = styled.h2`
 export function Header({ lastUpdated }) {
   return (
     <Container>
-      <Title>Coronavirus in the US</Title>
+      <Title>Coronavirus in the U.S.</Title>
       <UpdatedAt>
         Last Updated: {lastUpdated && format(new Date(lastUpdated), 'PPPp')}
       </UpdatedAt>
