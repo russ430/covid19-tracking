@@ -32,17 +32,13 @@ export const getDailyData = () => ({
 
 export const getDailyDataSuccess = (data) => ({
   type: types.GET_DAILY_DATA_SUCCESS,
+  lastUpdated: data[data.length - 1].lastUpdated,
   data,
 });
 
 export const getDailyDataFailure = (error) => ({
   type: types.GET_DAILY_DATA_FAILURE,
   error,
-});
-
-export const setLastUpdated = (time) => ({
-  type: types.SET_LAST_UPDATED,
-  time,
 });
 
 export const getResources = () => ({
@@ -106,7 +102,6 @@ export const fetchDailyData = (state) => {
         data.reverse();
         const parsed = parseData(data);
         dispatch(getDailyDataSuccess(parsed));
-        dispatch(setLastUpdated(parsed[parsed.length - 1].lastUpdated));
       })
       .catch((error) => {
         dispatch(getDailyDataFailure(error));

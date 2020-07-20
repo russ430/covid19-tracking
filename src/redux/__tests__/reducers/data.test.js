@@ -16,7 +16,7 @@ describe('data reducer', () => {
   });
 
   it('handles GET_DAILY_DATA_SUCCESS', () => {
-    const data = 1;
+    const data = [{ lastUpdated: 1 }];
     expect(
       reducer(
         { ...initialState, isFetching: true },
@@ -27,6 +27,7 @@ describe('data reducer', () => {
       data,
       isFetching: false,
       error: null,
+      lastUpdated: data[data.length - 1].lastUpdated,
     });
   });
 

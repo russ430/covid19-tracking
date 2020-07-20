@@ -4,6 +4,7 @@ export const initialState = {
   data: null,
   error: null,
   isFetching: false,
+  lastUpdated: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -20,17 +21,13 @@ const reducer = (state = initialState, action) => {
         data: action.data,
         isFetching: false,
         error: null,
+        lastUpdated: action.lastUpdated,
       };
     case types.GET_DAILY_DATA_FAILURE:
       return {
         ...state,
         error: action.error,
         isFetching: false,
-      };
-    case types.SET_LAST_UPDATED:
-      return {
-        ...state,
-        lastUpdated: action.time,
       };
     default:
       return state;
