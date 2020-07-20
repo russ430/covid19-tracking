@@ -8,10 +8,27 @@ describe('state reducer', () => {
   it('handles GET_ALL_STATES_META_SUCCESS', () => {
     const meta = 1;
     expect(
-      reducer(initialState, actions.getAllStatesMetaSuccess(meta)),
+      reducer(
+        { ...initialState, isFetching: true },
+        actions.getAllStatesMetaSuccess(meta),
+      ),
     ).toEqual({
       ...initialState,
       meta,
+      isFetching: false,
+    });
+  });
+
+  it('handles GET_ALL_STATES_META_FAILURE', () => {
+    const error = 1;
+    expect(
+      reducer(
+        { ...initialState, isFetching: true },
+        actions.getAllStatesMetaFailure(error),
+      ),
+    ).toEqual({
+      ...initialState,
+      error,
       isFetching: false,
     });
   });
