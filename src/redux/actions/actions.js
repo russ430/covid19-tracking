@@ -1,8 +1,11 @@
 import axios from 'axios';
+import RSSParser from 'rss-parser';
 
 import parseMetaData from '../../utils/parseMetaData';
 import parseData from '../../utils/parseData';
 import * as types from '../constants/types';
+
+const parser = new RSSParser();
 
 export const getAllStatesMeta = () => ({
   type: types.GET_ALL_STATES_META,
@@ -25,7 +28,7 @@ export const selectState = (state) => ({
 
 export const getDailyData = () => ({
   type: types.GET_DAILY_DATA,
-})
+});
 
 export const getDailyDataSuccess = (data) => ({
   type: types.GET_DAILY_DATA_SUCCESS,
@@ -41,6 +44,36 @@ export const setLastUpdated = (time) => ({
   type: types.SET_LAST_UPDATED,
   time,
 });
+
+export const getResources = () => ({
+  type: types.GET_RESOURCES,
+});
+
+export const getResourcesSuccess = (resources) => ({
+  type: types.GET_RESOURCES_SUCCESS,
+  resources,
+});
+
+export const getResourcesFailure = (error) => ({
+  type: types.GET_RESOURCES_FAILURE,
+  error,
+});
+
+function fetchTheResources() {
+  return parser.parseURL(
+    'https://tools.cdc.gov/api/v2/resources/media/403372.rss',
+  );
+}
+
+export const fetchResources = () => {
+  return (dispatch) => {
+    dispatch(getResources());
+    return fetchTheResources().then(
+      ({ items }) => dispatch(getResourcesSuccess(items.slice(0, 20))),
+      (error) => dispatch(getResourcesFailure(error)),
+    );
+  };
+};
 
 export const fetchAllStatesMeta = () => {
   return (dispatch) => {
@@ -69,7 +102,7 @@ export const fetchDailyData = (state) => {
     axios
       .get(url)
       .then(({ data }) => {
-        // move first dates to beginning of array
+        // move current dates to end of array
         data.reverse();
         const parsed = parseData(data);
         dispatch(getDailyDataSuccess(parsed));
