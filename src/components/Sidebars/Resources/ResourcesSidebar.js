@@ -65,7 +65,7 @@ export function ResourceSidebar({ getResources, resources }) {
           ? resources.map((article) => (
               <Article data={article} key={article.title} />
             ))
-          : dummyPlaceholders.map(() => <ResourcePlaceholder />)}
+          : dummyPlaceholders.map((_, i) => <ResourcePlaceholder key={i} />)}
       </Articles>
     </Container>
   );

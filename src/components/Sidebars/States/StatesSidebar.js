@@ -99,8 +99,8 @@ export function StatesSidebar({ states, getMeta, selected, setSelected }) {
             ))}
           </>
         ) : (
-          dummyStates.map(() => (
-            <StatesPlaceholder width={getRandomInt(75, 135)} />
+          dummyStates.map((_, i) => (
+            <StatesPlaceholder key={i} width={getRandomInt(75, 135)} />
           ))
         )}
       </States>
