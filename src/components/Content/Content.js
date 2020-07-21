@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import DataTable from '../DataTable/DataTable';
 import Loader from '../Loader/Loader';
 import NewCasesGraph from '../Graphs/NewCasesGraph';
 import NumericalData from '../NumericalData/NumericalData';
@@ -40,6 +41,7 @@ export function Content({ isFetching, meta, selectedState }) {
         <NewCasesGraph />
         <NumericalData />
       </div>
+      <DataTable />
     </Container>
   );
 }
