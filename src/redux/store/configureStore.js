@@ -1,16 +1,18 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import dataReducer from '../reducers/data';
+import dailyDataReducer from '../reducers/dailyData';
 import metaReducer from '../reducers/meta';
 import selectedReducer from '../reducers/selected';
 import resourcesReducers from '../reducers/resources';
+import currentDataReducer from '../reducers/currentData';
 
 const rootReducer = combineReducers({
-  data: dataReducer,
+  dailyData: dailyDataReducer,
   meta: metaReducer,
   selected: selectedReducer,
   resources: resourcesReducers,
+  currentData: currentDataReducer,
 });
 
 export default function configureStore() {

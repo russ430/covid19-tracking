@@ -2,7 +2,8 @@ import axios from 'axios';
 import RSSParser from 'rss-parser';
 
 import parseMetaData from '../../utils/parseMetaData';
-import parseData from '../../utils/parseData';
+import parseDailyData from '../../utils/parseDailyData';
+import parseCurrentData from '../../utils/parseCurrentData';
 import * as types from '../constants/types';
 
 const parser = new RSSParser();
@@ -55,7 +56,35 @@ export const getResourcesFailure = (error) => ({
   error,
 });
 
-function fetchTheResources() {
+export const getCurrentStateData = () => ({
+  type: types.GET_CURRENT_STATE_DATA,
+});
+
+export const getCurrentStateDataSuccess = (data) => ({
+  type: types.GET_CURRENT_STATE_DATA_SUCCESS,
+  data,
+});
+
+export const getCurrentStateDataFailure = (error) => ({
+  type: types.GET_CURRENT_STATE_DATA_FAILURE,
+  error,
+});
+
+function fetchAllCurrentStateData() {
+  return axios.get('https://covidtracking.com/api/v1/states/current.json');
+}
+
+export const fetchCurrentStateData = () => {
+  return (dispatch) => {
+    dispatch(getCurrentStateData());
+    return fetchAllCurrentStateData().then(
+      ({ data }) => dispatch(getCurrentStateDataSuccess(parseCurrentData(data))),
+      (error) => dispatch(getCurrentStateDataFailure(error)),
+    );
+  };
+};
+
+function fetchParsedResourceFeed() {
   return parser.parseURL(
     'https://tools.cdc.gov/api/v2/resources/media/403372.rss',
   );
@@ -64,7 +93,7 @@ function fetchTheResources() {
 export const fetchResources = () => {
   return (dispatch) => {
     dispatch(getResources());
-    return fetchTheResources().then(
+    return fetchParsedResourceFeed().then(
       ({ items }) => dispatch(getResourcesSuccess(items.slice(0, 20))),
       (error) => dispatch(getResourcesFailure(error)),
     );
@@ -100,7 +129,7 @@ export const fetchDailyData = (state) => {
       .then(({ data }) => {
         // move current dates to end of array
         data.reverse();
-        const parsed = parseData(data);
+        const parsed = parseDailyData(data);
         dispatch(getDailyDataSuccess(parsed));
       })
       .catch((error) => {
