@@ -1,4 +1,4 @@
-import reducer, { initialState } from '../../reducers/data';
+import reducer, { initialState } from '../../reducers/dailyData';
 
 import * as actions from '../../actions/actions';
 

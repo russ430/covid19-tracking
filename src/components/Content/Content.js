@@ -58,7 +58,7 @@ Content.propTypes = {
 const mapStateToProps = (state) => ({
   selectedState: state.selected.selected,
   meta: state.meta.meta,
-  isFetching: state.data.isFetching,
+  isFetching: state.dailyData.isFetching,
 });
 
 export default connect(mapStateToProps)(Content);

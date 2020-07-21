@@ -65,7 +65,7 @@ NumericalData.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  data: state.data.data,
+  data: state.dailyData.data,
 });
 
 export default connect(mapStateToProps)(NumericalData);

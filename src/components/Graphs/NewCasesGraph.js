@@ -4,12 +4,22 @@ import { connect } from 'react-redux';
 import * as d3 from 'd3';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 import bisect from '../../utils/bisect';
 import {
   fetchDailyData,
   getDailyDataSuccess,
 } from '../../redux/actions/actions';
+
+const Title = styled.h2`
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+`;
 
 const GRAPHHEIGHT = 275;
 const GRAPHWIDTH = 425;
@@ -23,7 +33,7 @@ export function NewCasesGraph({
   const formatNumber = d3.format(',');
   const svgRef = useRef();
   const svg = d3.select(svgRef.current);
-  const margin = { top: 20, right: 10, bottom: 30, left: 20 };
+  const margin = { top: 20, right: 0, bottom: 30, left: 20 };
   const width = GRAPHWIDTH - margin.right - margin.left;
   const height = GRAPHHEIGHT - margin.top - margin.bottom;
 
@@ -131,18 +141,6 @@ export function NewCasesGraph({
     // add x axis and label
     const xAxis = svg.append('g').attr('class', 'x-axis').call(createXAxis);
     xAxis.selectAll('.tick', 'text').style('font-size', '0.8rem');
-
-    // add graph title
-    svg
-      .append('text')
-      .attr('class', 'graph-title')
-      .attr('x', (width + margin.left) / 2)
-      .attr('y', margin.top - 5)
-      .attr('text-anchor', 'middle')
-      .style('font-weight', '700')
-      .style('font-size', '1.2rem')
-      .style('font-family', 'Open Sans, serif')
-      .text('New reported cases by day');
 
     // add legend
     svg
@@ -257,6 +255,7 @@ export function NewCasesGraph({
 
   return (
     <div style={{ margin: '1rem' }}>
+      <Title>New reported cases by day</Title>
       <svg
         width={GRAPHWIDTH}
         height={GRAPHHEIGHT}
@@ -280,7 +279,7 @@ NewCasesGraph.propTypes = {
 
 const mapStateToProps = (state) => ({
   selectedState: state.selected.selected,
-  data: state.data.data,
+  data: state.dailyData.data,
 });
 
 const mapDispatchToProps = (dispatch) => ({
