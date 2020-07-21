@@ -15,7 +15,7 @@ const Container = styled.div`
 const Title = styled.a`
   font-family: 'Open Sans', sans-serif;
   color: #000;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
   margin: 1rem 0 0.2rem 0;
   padding: 0;
@@ -32,14 +32,14 @@ const Content = styled.p`
   font-size: 0.9rem;
   font-style: italic;
   margin: 0;
-  padding: 0;
+  padding: 0 0.4rem;
 `;
 
 const PublishDate = styled.p`
   margin: 0;
-  margin-bottom: 0.5rem;
-  padding: 0
-  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  padding: 0;
+  font-size: 1rem;
 `;
 
 export default function Article({ data }) {

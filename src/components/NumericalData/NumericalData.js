@@ -30,6 +30,17 @@ const Data = styled.h2`
   padding: 0;
 `;
 
+const Note = styled.h3`
+  font-size: 0.9rem;
+  width: 250px;
+  font-weight: 400;
+  font-family: 'Open Sans', sans-serif;
+  color: #777;
+  font-style: italic;
+  margin: 0.5rem 0;
+  padding: 0;
+`;
+
 export function NumericalData({ data }) {
   const formatNumber = format(',');
   return (
@@ -40,6 +51,7 @@ export function NumericalData({ data }) {
       </Data>
       <Label>TOTAL DEATHS:</Label>
       <Data>{data ? formatNumber(data[data.length - 1].deaths) : '-'}</Data>
+      <Note>*Includes confirmed and probable deaths where available</Note>
     </Container>
   );
 }

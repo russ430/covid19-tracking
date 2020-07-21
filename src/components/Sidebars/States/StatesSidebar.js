@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -57,8 +58,9 @@ const States = styled.div`
 `;
 
 const State = styled.h3`
-  font-size: ${(props) => (props.selected ? '1.2rem' : '1rem')};
+  font-size: 1rem;
   font-family: 'Open Sans', sans-serif;
+  text-decoration: ${(props) => (props.selected ? 'underline' : null)};
   padding: 0;
   margin: 0.5rem 0;
   cursor: pointer;
