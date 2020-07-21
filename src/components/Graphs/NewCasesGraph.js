@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
+import bisect from '../../utils/bisect';
 import {
   fetchDailyData,
   getDailyDataSuccess,
@@ -17,7 +18,7 @@ export function NewCasesGraph({
   selectedState,
   fetchData,
   data,
-  setDataFromCache,
+  getDataFromCache,
 }) {
   const formatNumber = d3.format(',');
   const svgRef = useRef();
@@ -50,47 +51,13 @@ export function NewCasesGraph({
       .data(data)
       .join('rect')
       .style('transform', 'scale(1, -1)')
+      .attr('class', (d) => `${d.hash}`)
       .attr('x', (d, i) => barScale(i))
       .attr('y', () => -height + margin.bottom)
       .attr('width', barScale.bandwidth())
       .style('fill', 'lightblue')
       .transition()
       .attr('height', (d) => yScale(0) - yScale(d.newCases));
-
-    // create tooltip
-    const tooltip = d3
-      .select('body')
-      .append('div')
-      .attr('class', 'd3-tooltip')
-      .style('position', 'absolute')
-      .style('z-index', '10')
-      .style('visibility', 'hidden')
-      .style('font-size', '0.8rem')
-      .style('padding', '5px')
-      .style('background', '#fff')
-      .style('border', '1px solid #ddd')
-      .text('a simple tooltip');
-
-    // show tooltip when bars are hovered over with mouse
-    svg
-      .selectAll('rect')
-      .on('mouseover', (d) => {
-        tooltip
-          .html(
-            `<div>${format(new Date(d.date), 'MMMM do')}</div>
-             <div>Cases: ${formatNumber(d.newCases)}</div>
-             <div>7 Day Avg: ${formatNumber(d.avgCases7Days)}</div>`,
-          )
-          .style('visibility', 'visible');
-      })
-      .on('mousemove', () => {
-        tooltip
-          .style('top', `${d3.event.pageY - 10}px`)
-          .style('left', `${d3.event.pageX + 10}px`);
-      })
-      .on('mouseout', () => {
-        tooltip.html(``).style('visibility', 'hidden');
-      });
 
     const line = d3
       .line()
@@ -213,6 +180,51 @@ export function NewCasesGraph({
       .style('font-size', '0.9rem')
       .attr('text-anchor', 'left')
       .style('alignment-baseline', 'middle');
+
+    // create tooltip
+    const tooltip = d3
+      .select('body')
+      .append('div')
+      .attr('class', 'd3-tooltip')
+      .style('position', 'absolute')
+      .style('z-index', '10')
+      .style('visibility', 'hidden')
+      .style('font-size', '0.8rem')
+      .style('padding', '5px')
+      .style('background', '#fff')
+      .style('border', '1px solid #ddd')
+      .text('a simple tooltip');
+
+    // show tooltip when mouse hovers over svg
+    svg
+      .on('touchmove mousemove', () => {
+        if (
+          d3.event.offsetX < margin.left ||
+          d3.event.offsetX > width - margin.right ||
+          d3.event.offsetY < margin.top ||
+          d3.event.offsetY > height
+        )
+          return;
+        // select data point closest to mouse pointer
+        const dataPoint = bisect(data, xScale.invert(d3.event.offsetX));
+        tooltip
+          .html(
+            `<div style="font-weight: 600;">${format(
+              new Date(dataPoint.date),
+              'MMMM do',
+            )}</div>
+           <div>Cases: ${formatNumber(dataPoint.newCases)}</div>
+           <div style="color: #666;">7 Day Avg: ${formatNumber(
+             dataPoint.avgCases7Days,
+           )}</div>`,
+          )
+          .style('visibility', 'visible')
+          .style('top', `${d3.event.pageY - 10}px`)
+          .style('left', `${d3.event.pageX + 10}px`);
+      })
+      .on('mouseout', () => {
+        tooltip.html(``).style('visibility', 'hidden');
+      });
   };
 
   const clearSVG = () => {
@@ -229,7 +241,7 @@ export function NewCasesGraph({
   useEffect(() => {
     const cachedData = sessionStorage.getItem(selectedState);
     if (cachedData) {
-      setDataFromCache(JSON.parse(cachedData));
+      getDataFromCache(JSON.parse(cachedData));
     } else {
       fetchData(selectedState);
     }
@@ -263,7 +275,7 @@ NewCasesGraph.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
   selectedState: PropTypes.string.isRequired,
   fetchData: PropTypes.func.isRequired,
-  setDataFromCache: PropTypes.func.isRequired,
+  getDataFromCache: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -273,7 +285,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchData: (state) => dispatch(fetchDailyData(state)),
-  setDataFromCache: (data) => dispatch(getDailyDataSuccess(data)),
+  getDataFromCache: (data) => dispatch(getDailyDataSuccess(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewCasesGraph);
