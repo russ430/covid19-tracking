@@ -3,15 +3,15 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import AdditionalResources from './components/AdditionalResources';
 import DataTable from '../DataTable/DataTable';
 import Loader from '../Loader/Loader';
 import NewCasesGraph from '../Graphs/NewCasesGraph';
-import NumericalData from '../NumericalData/NumericalData';
+import NumericalData from './components/NumericalData';
 
 const Container = styled.section`
   padding: 0 0.5rem;
-  margin: 0;
-  flex: 4;
+  margin: 0 auto;
 `;
 
 const Title = styled.h2`
@@ -41,6 +41,7 @@ export function Content({ isFetching, meta, selectedState }) {
         <NewCasesGraph />
         <NumericalData />
       </div>
+      <AdditionalResources />
       <DataTable />
     </Container>
   );
@@ -53,6 +54,7 @@ Content.defaultProps = {
 Content.propTypes = {
   selectedState: PropTypes.string.isRequired,
   meta: PropTypes.arrayOf(PropTypes.object),
+  isFetching: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
