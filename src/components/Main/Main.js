@@ -10,12 +10,16 @@ const Container = styled.div`
   margin: 1rem 0;
 `;
 
+const Sidebars = styled.div``;
+
 export default function Main() {
   return (
     <Container>
-      <StateSidebar />
+      <Sidebars>
+        <StateSidebar />
+        <ResourcesSidebar />
+      </Sidebars>
       <Content />
-      <ResourcesSidebar />
     </Container>
   );
 }

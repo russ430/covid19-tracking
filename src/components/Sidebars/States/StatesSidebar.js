@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Sidebar from '../Sidebar';
 import dummyStates from '../../../utils/dummyVariables/statesPlaceholders';
 import getRandomInt from '../../../utils/getRandomInt';
 import {
@@ -13,13 +14,13 @@ import {
 import StatesPlaceholder from '../../PlaceHolders/StatePlaceholder';
 
 const Container = styled.div`
-  flex: 1;
+  margin-bottom: 2rem;
 `;
 
 const Title = styled.h2`
   font-size: 1.3rem;
   font-family: 'Merriweather', serif;
-  margin: 0;
+  margin: 1rem 0;
   padding: 0;
 `;
 
@@ -27,34 +28,7 @@ const Line = styled.div`
   width: 100%;
   height: 1px;
   background-color: #000;
-  margin: 1rem 0;
-`;
-
-const States = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0 0.5rem;
-  height: 425px;
-  overflow: auto;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  &::-webkit-scrollbar-track {
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.1);
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.2);
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.4);
-  }
-  &::-webkit-scrollbar-thumb:active {
-    background: rgba(0, 0, 0, 0.9);
-  }
+  margin: 0.5rem 0;
 `;
 
 const State = styled.h3`
@@ -65,7 +39,6 @@ const State = styled.h3`
   margin: 0.5rem 0;
   cursor: pointer;
   align-self: flex-start;
-  font-style: ${(props) => (props.selected ? 'italic' : null)};
 `;
 
 export function StatesSidebar({ states, getMeta, selected, setSelected }) {
@@ -81,7 +54,7 @@ export function StatesSidebar({ states, getMeta, selected, setSelected }) {
     <Container>
       <Title>States/Territories</Title>
       <Line />
-      <States>
+      <Sidebar>
         {states ? (
           <>
             <State
@@ -93,7 +66,7 @@ export function StatesSidebar({ states, getMeta, selected, setSelected }) {
             {states.map((state) => (
               <State
                 selected={selected === state.state}
-                key={state.fips}
+                key={state.id}
                 onClick={() => handleOnClick(state.state)}
               >
                 {state.name}
@@ -105,7 +78,7 @@ export function StatesSidebar({ states, getMeta, selected, setSelected }) {
             <StatesPlaceholder key={i} width={getRandomInt(75, 135)} />
           ))
         )}
-      </States>
+      </Sidebar>
     </Container>
   );
 }
