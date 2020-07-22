@@ -7,7 +7,7 @@ import { format } from 'd3';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 3rem 0rem;
+  margin: 5rem 1.5rem 0 1.5rem;
 `;
 
 const Label = styled.h2`
@@ -43,14 +43,22 @@ const Note = styled.h3`
 
 export function NumericalData({ data }) {
   const formatNumber = format(',');
+
+  let cases = '-';
+  let deaths = '-';
+
+  if (data) {
+    const selection = data[data.length - 1];
+    cases = formatNumber(selection.totalCases);
+    deaths = formatNumber(selection.deaths);
+  }
+
   return (
     <Container>
       <Label>TOTAL CASES:</Label>
-      <Data>
-        {data ? `${formatNumber(data[data.length - 1].totalCases)}` : '-'}
-      </Data>
+      <Data>{cases}</Data>
       <Label>TOTAL DEATHS:</Label>
-      <Data>{data ? formatNumber(data[data.length - 1].deaths) : '-'}</Data>
+      <Data>{deaths}</Data>
       <Note>*Includes confirmed and probable deaths where available</Note>
     </Container>
   );
