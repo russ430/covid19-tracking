@@ -9,7 +9,7 @@ import Main from './components/Main/Main';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 1500px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 1rem 2rem;
 `;

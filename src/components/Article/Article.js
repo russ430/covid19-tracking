@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 
 const Container = styled.div`
   padding: 0.5rem 0;
+  margin: 0.5rem 0;
 
   &:not(:first-child) {
     border-top: 1px solid #e7e7e7;
-    margin: 0.5rem 0;
+    padding: 1rem 0 0.5rem 0;
   }
 `;
 
