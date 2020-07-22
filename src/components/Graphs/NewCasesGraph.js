@@ -21,14 +21,26 @@ const Title = styled.h2`
   padding: 0;
 `;
 
-const GRAPHHEIGHT = 275;
-const GRAPHWIDTH = 425;
+const Updated = styled.h3`
+  font-size: 0.8rem;
+  font-weight: 400;
+  font-family: 'Open Sans', sans-serif;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  margin-bottom: -0.5rem;
+  font-style: italic;
+`;
+
+const GRAPHHEIGHT = 300;
+const GRAPHWIDTH = 450;
 
 export function NewCasesGraph({
   selectedState,
   fetchData,
   data,
-  getDataFromCache,
+  storeDataFromCache,
+  lastUpdated,
 }) {
   const formatNumber = d3.format(',');
   const svgRef = useRef();
@@ -239,7 +251,7 @@ export function NewCasesGraph({
   useEffect(() => {
     const cachedData = sessionStorage.getItem(selectedState);
     if (cachedData) {
-      getDataFromCache(JSON.parse(cachedData));
+      storeDataFromCache(JSON.parse(cachedData));
     } else {
       fetchData(selectedState);
     }
@@ -256,6 +268,7 @@ export function NewCasesGraph({
   return (
     <div style={{ margin: '1rem' }}>
       <Title>New reported cases by day</Title>
+      <Updated>*Last updated {format(new Date(lastUpdated), 'PPP @ p')}</Updated>
       <svg
         width={GRAPHWIDTH}
         height={GRAPHHEIGHT}
@@ -274,17 +287,18 @@ NewCasesGraph.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
   selectedState: PropTypes.string.isRequired,
   fetchData: PropTypes.func.isRequired,
-  getDataFromCache: PropTypes.func.isRequired,
+  storeDataFromCache: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   selectedState: state.selected.selected,
   data: state.dailyData.data,
+  lastUpdated: state.dailyData.lastUpdated,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchData: (state) => dispatch(fetchDailyData(state)),
-  getDataFromCache: (data) => dispatch(getDailyDataSuccess(data)),
+  storeDataFromCache: (data) => dispatch(getDailyDataSuccess(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewCasesGraph);
