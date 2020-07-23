@@ -4,14 +4,11 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Sidebar from '../Sidebar';
-import dummyStates from '../../../utils/dummyVariables/statesPlaceholders';
-import getRandomInt from '../../../utils/getRandomInt';
-import {
-  requestAllStatesMeta,
-  selectState,
-} from '../../../redux/actions/actions';
-import StatesPlaceholder from '../../PlaceHolders/StatePlaceholder';
+import Sidebar from './components/Sidebar';
+import dummyStates from '../../utils/dummyVariables/statesPlaceholders';
+import getRandomInt from '../../utils/getRandomInt';
+import { requestAllStatesMeta, selectState } from '../../redux/actions/actions';
+import StatesPlaceholder from '../PlaceHolders/StatePlaceholder';
 
 const Container = styled.div`
   margin-bottom: 2rem;

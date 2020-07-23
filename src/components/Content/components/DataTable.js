@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { format } from 'd3';
 
-import { requestCurrentStateData } from '../../redux/actions/actions';
+import { requestCurrentStateData } from '../../../redux/actions/actions';
 
 const Table = styled.table`
   border-collapse: collapse;

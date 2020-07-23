@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import AdditionalResources from './components/AdditionalResources';
-import DataTable from '../DataTable/DataTable';
+import StateResources from './components/StateResources';
+import DataTable from './components/DataTable';
 import Loader from '../Loader/Loader';
-import NewCasesGraph from '../Graphs/NewCasesGraph';
+import NewCasesGraph from './components/NewCasesGraph';
 import NumericalData from './components/NumericalData';
 
 const Container = styled.section`
@@ -41,7 +41,7 @@ export function Content({ isFetching, meta, selectedState }) {
         <NewCasesGraph />
         <NumericalData />
       </div>
-      <AdditionalResources />
+      <StateResources />
       <DataTable />
     </Container>
   );

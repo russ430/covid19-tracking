@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Sidebar from '../Sidebar';
-import dummyPlaceholders from '../../../utils/dummyVariables/resourcesPlaceholders';
-import ResourcePlaceholder from '../../PlaceHolders/ResourcePlaceholder';
-import Article from '../../Article/Article';
-import { requestResources } from '../../../redux/actions/actions';
+import Sidebar from './components/Sidebar';
+import dummyPlaceholders from '../../utils/dummyVariables/resourcesPlaceholders';
+import ResourcePlaceholder from '../PlaceHolders/ResourcePlaceholder';
+import Article from './components/Article';
+import { requestResources } from '../../redux/actions/actions';
 
 const Container = styled.div`
   margin-top: 1rem;

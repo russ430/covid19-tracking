@@ -40,7 +40,7 @@ const Link = styled.a`
   }
 `;
 
-export function AdditionalResources({ meta, selected }) {
+export function StateResources({ meta, selected }) {
   let selectedMeta;
   if (meta) {
     selectedMeta = meta.find((state) => state.state === selected);
@@ -92,11 +92,11 @@ export function AdditionalResources({ meta, selected }) {
   );
 }
 
-AdditionalResources.defaultProps = {
+StateResources.defaultProps = {
   meta: [],
 };
 
-AdditionalResources.propTypes = {
+StateResources.propTypes = {
   meta: PropTypes.array,
   selected: PropTypes.string.isRequired,
 };
@@ -106,4 +106,4 @@ const mapStateToProps = (state) => ({
   selected: state.selected.selected,
 });
 
-export default connect(mapStateToProps)(AdditionalResources);
+export default connect(mapStateToProps)(StateResources);
