@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { format } from 'd3';
+
+import { requestCurrentStateData } from '../../redux/actions/actions';
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -10,6 +14,10 @@ const Row = styled.tr`
   border-bottom: 1px solid #ccc;
 `;
 
+const Head = styled.thead``;
+
+const Body = styled.tbody``;
+
 const Th = styled.th`
   font-size: 0.8rem;
   font-weight: 400;
@@ -17,34 +25,39 @@ const Th = styled.th`
   vertical-align: bottom;
   color: #777;
   text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 
-  &:not(:first-child) {
-    padding: 0.5rem 1rem;
+  &:hover {
+    text-decoration: underline;
   }
 `;
 
-const Td = styled(Th)`
+const Td = styled.td`
+  vertical-align: center;
+  text-align: right;
   font-size: 1rem;
   color: #111;
   text-transform: none;
+  padding: 0.5rem 1rem;
 `;
 
 const State = styled(Td)`
   text-align: left;
-  padding: 0.5rem 0;
-  padding-right: 3rem;
+  padding-left: 0;
 `;
 
-const Header = styled.thead`
-  font-size: 1.2rem;
-`;
+export function DataTable({ data, getCurrentData, meta }) {
+  const formatNumber = format(',');
+  useEffect(() => {
+    getCurrentData();
+  }, []);
 
-export default function DataTable() {
   return (
     <Table>
-      <Header>
+      <Head>
         <Row>
-          <Th>&nbsp;</Th>
+          <Th style={{ textAlign: 'left', paddingLeft: '0' }}>State</Th>
           <Th>
             Total
             <br />
@@ -56,18 +69,36 @@ export default function DataTable() {
             Cases
           </Th>
           <Th>
-            Cases <br />
-            in Last
-            <br />7 Days
+            Tests <br />
+            Administered
           </Th>
         </Row>
-      </Header>
-      <Row>
-        <State>Massachusetts</State>
-        <Td>324,123</Td>
-        <Td>3,211</Td>
-        <Td>653</Td>
-      </Row>
+      </Head>
+      <Body>
+        {data && meta
+          ? data.map((state) => (
+              <Row key={state.hash}>
+                <State>
+                  {meta.find((current) => current.state === state.state).name}
+                </State>
+                <Td>{formatNumber(state.deaths)}</Td>
+                <Td>{formatNumber(state.totalCases)}</Td>
+                <Td>{formatNumber(state.tests)}</Td>
+              </Row>
+            ))
+          : null}
+      </Body>
     </Table>
   );
 }
+
+const mapStateToProps = (state) => ({
+  data: state.currentData.data,
+  meta: state.meta.meta,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getCurrentData: () => dispatch(requestCurrentStateData()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DataTable);

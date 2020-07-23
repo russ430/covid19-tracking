@@ -8,7 +8,7 @@ import Sidebar from '../Sidebar';
 import dummyStates from '../../../utils/dummyVariables/statesPlaceholders';
 import getRandomInt from '../../../utils/getRandomInt';
 import {
-  fetchAllStatesMeta,
+  requestAllStatesMeta,
   selectState,
 } from '../../../redux/actions/actions';
 import StatesPlaceholder from '../../PlaceHolders/StatePlaceholder';
@@ -100,7 +100,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getMeta: () => dispatch(fetchAllStatesMeta()),
+  getMeta: () => dispatch(requestAllStatesMeta()),
   setSelected: (state) => dispatch(selectState(state)),
 });
 

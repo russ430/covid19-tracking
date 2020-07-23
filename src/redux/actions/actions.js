@@ -1,12 +1,13 @@
-import axios from 'axios';
-import RSSParser from 'rss-parser';
-
+import {
+  fetchResources,
+  fetchCurrentStateData,
+  fetchAllStatesMeta,
+  fetchDailyData,
+} from '../../api/api';
 import parseMetaData from '../../utils/parseMetaData';
 import parseDailyData from '../../utils/parseDailyData';
 import parseCurrentData from '../../utils/parseCurrentData';
 import * as types from '../constants/types';
-
-const parser = new RSSParser();
 
 export const getAllStatesMeta = () => ({
   type: types.GET_ALL_STATES_META,
@@ -70,41 +71,31 @@ export const getCurrentStateDataFailure = (error) => ({
   error,
 });
 
-function fetchAllCurrentStateData() {
-  return axios.get('https://covidtracking.com/api/v1/states/current.json');
-}
-
-export const fetchCurrentStateData = () => {
+export const requestCurrentStateData = () => {
   return (dispatch) => {
     dispatch(getCurrentStateData());
-    return fetchAllCurrentStateData().then(
-      ({ data }) => dispatch(getCurrentStateDataSuccess(parseCurrentData(data))),
+    return fetchCurrentStateData().then(
+      ({ data }) =>
+        dispatch(getCurrentStateDataSuccess(parseCurrentData(data))),
       (error) => dispatch(getCurrentStateDataFailure(error)),
     );
   };
 };
 
-function fetchParsedResourceFeed() {
-  return parser.parseURL(
-    'https://tools.cdc.gov/api/v2/resources/media/403372.rss',
-  );
-}
-
-export const fetchResources = () => {
+export const requestResources = () => {
   return (dispatch) => {
     dispatch(getResources());
-    return fetchParsedResourceFeed().then(
+    return fetchResources().then(
       ({ items }) => dispatch(getResourcesSuccess(items.slice(0, 20))),
       (error) => dispatch(getResourcesFailure(error)),
     );
   };
 };
 
-export const fetchAllStatesMeta = () => {
+export const requestAllStatesMeta = () => {
   return (dispatch) => {
     dispatch(getAllStatesMeta());
-    axios
-      .get('https://covidtracking.com/api/v1/states/info.json')
+    return fetchAllStatesMeta()
       .then(({ data }) => {
         const meta = parseMetaData(data);
         dispatch(getAllStatesMetaSuccess(meta));
@@ -115,17 +106,10 @@ export const fetchAllStatesMeta = () => {
   };
 };
 
-export const fetchDailyData = (state) => {
-  let url;
-  if (state === 'all') {
-    url = 'https://covidtracking.com/api/v1/us/daily.json';
-  } else {
-    url = `https://covidtracking.com/api/v1/states/${state}/daily.json`;
-  }
+export const requestDailyData = (state) => {
   return (dispatch) => {
     dispatch(getDailyData());
-    axios
-      .get(url)
+    return fetchDailyData(state)
       .then(({ data }) => {
         // move current dates to end of array
         data.reverse();

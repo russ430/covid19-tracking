@@ -8,7 +8,7 @@ import Sidebar from '../Sidebar';
 import dummyPlaceholders from '../../../utils/dummyVariables/resourcesPlaceholders';
 import ResourcePlaceholder from '../../PlaceHolders/ResourcePlaceholder';
 import Article from '../../Article/Article';
-import { fetchResources } from '../../../redux/actions/actions';
+import { requestResources } from '../../../redux/actions/actions';
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -63,7 +63,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getResources: () => dispatch(fetchResources()),
+  getResources: () => dispatch(requestResources()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResourceSidebar);

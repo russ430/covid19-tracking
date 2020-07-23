@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import bisect from '../../utils/bisect';
 import {
-  fetchDailyData,
+  requestDailyData,
   getDailyDataSuccess,
 } from '../../redux/actions/actions';
 
@@ -33,7 +33,7 @@ const Updated = styled.h3`
 `;
 
 const GRAPHHEIGHT = 300;
-const GRAPHWIDTH = 450;
+const GRAPHWIDTH = 600;
 
 export function NewCasesGraph({
   selectedState,
@@ -84,7 +84,8 @@ export function NewCasesGraph({
     const line = d3
       .line()
       .x((d) => xScale(new Date(d.date)))
-      .y((d) => yScale(+d.avgCases7Days));
+      .y((d) => yScale(+d.avgCases7Days))
+      .curve(d3.curveCardinal);
 
     // create line based on 7 day avg
     const path = svg
@@ -297,7 +298,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchData: (state) => dispatch(fetchDailyData(state)),
+  fetchData: (state) => dispatch(requestDailyData(state)),
   storeDataFromCache: (data) => dispatch(getDailyDataSuccess(data)),
 });
 
