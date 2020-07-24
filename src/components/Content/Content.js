@@ -28,6 +28,15 @@ const Load = styled.div`
   margin-top: 0.5rem;
 `;
 
+const Header = styled.h3`
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-family: 'Merriweather', serif;
+  margin: 2rem 0;
+  padding: 0;
+  text-align: center;
+`;
+
 export function Content({ isFetching, meta, selectedState }) {
   return (
     <Container>
@@ -42,7 +51,10 @@ export function Content({ isFetching, meta, selectedState }) {
         <NumericalData />
       </div>
       <StateResources />
-      <DataTable />
+      <div style={{ marginTop: '1rem', padding: '1rem 0' }}>
+        <Header>Cases and Deaths by State</Header>
+        <DataTable />
+      </div>
     </Container>
   );
 }

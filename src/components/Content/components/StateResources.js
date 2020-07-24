@@ -48,7 +48,7 @@ export function StateResources({ meta, selected }) {
 
   return (
     <Container>
-      <Header>Additional Resources</Header>
+      <Header>State Resources</Header>
       <List>
         {selectedMeta ? (
           <>

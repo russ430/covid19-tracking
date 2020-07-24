@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Load = styled.div`
+const Loading = styled.div`
   border-radius: 50%;
   width: 1em;
   height: 1em;
@@ -66,5 +66,5 @@ const Load = styled.div`
 `;
 
 export default function Loader() {
-  return <Load />;
+  return <Loading />;
 }
