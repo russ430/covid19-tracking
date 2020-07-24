@@ -3,7 +3,10 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import StateResources from './components/StateResources';
+import {
+  setGraphDataToNewCases,
+  setGraphDataToNewDeaths,
+} from '../../redux/actions/actions';
 import DataTable from './components/DataTable';
 import Loader from '../Loader/Loader';
 import NewCasesGraph from './components/NewCasesGraph';
@@ -37,7 +40,31 @@ const Header = styled.h3`
   text-align: center;
 `;
 
-export function Content({ isFetching, meta, selectedState }) {
+const Buttons = styled.div`
+  text-align: center;
+`;
+
+const Button = styled.button`
+  padding: 0.5rem 4rem;
+  border: ${(props) =>
+    props.selected ? '1px solid #000' : '1px solid #e2e2e2'};
+  background-color: #efefef;
+  border-radius: 5px;
+  margin: 0 0.2rem;
+  color: #000;
+  font-size: 1rem;
+  font-family: 'Open Sans', sans-serif;
+  cursor: pointer;
+`;
+
+export function Content({
+  graphSelected,
+  isFetching,
+  meta,
+  selectedState,
+  setGraphToNewCases,
+  setGraphToNewDeaths,
+}) {
   return (
     <Container>
       <Title>
@@ -47,10 +74,27 @@ export function Content({ isFetching, meta, selectedState }) {
       </Title>
       <Load>{isFetching && <Loader />}</Load>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <NewCasesGraph />
+        <div style={{ marginBottom: '2rem' }}>
+          <NewCasesGraph />
+          <Buttons>
+            <Button
+              type="button"
+              selected={graphSelected === 'Cases'}
+              onClick={() => setGraphToNewCases()}
+            >
+              Cases
+            </Button>
+            <Button
+              type="button"
+              selected={graphSelected === 'Deaths'}
+              onClick={() => setGraphToNewDeaths()}
+            >
+              Deaths
+            </Button>
+          </Buttons>
+        </div>
         <NumericalData />
       </div>
-      <StateResources />
       <div style={{ marginTop: '1rem', padding: '1rem 0' }}>
         <Header>Cases and Deaths by State</Header>
         <DataTable />
@@ -67,12 +111,19 @@ Content.propTypes = {
   selectedState: PropTypes.string.isRequired,
   meta: PropTypes.arrayOf(PropTypes.object),
   isFetching: PropTypes.bool.isRequired,
+  graphSelected: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   selectedState: state.selected.selected,
   meta: state.meta.meta,
   isFetching: state.dailyData.isFetching,
+  graphSelected: state.graph.name,
 });
 
-export default connect(mapStateToProps)(Content);
+const mapDispatchToProps = (dispatch) => ({
+  setGraphToNewCases: () => dispatch(setGraphDataToNewCases()),
+  setGraphToNewDeaths: () => dispatch(setGraphDataToNewDeaths()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

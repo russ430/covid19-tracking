@@ -39,8 +39,11 @@ export function NewCasesGraph({
   selectedState,
   fetchData,
   data,
+  dataName,
   storeDataFromCache,
   lastUpdated,
+  barsKey,
+  lineKey,
 }) {
   const formatNumber = d3.format(',');
   const svgRef = useRef();
@@ -58,7 +61,7 @@ export function NewCasesGraph({
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.newCases)])
+      .domain([0, d3.max(data, (d) => d[barsKey])])
       .range([height - margin.bottom, margin.top])
       .nice();
 
@@ -79,12 +82,12 @@ export function NewCasesGraph({
       .attr('width', barScale.bandwidth())
       .style('fill', 'lightblue')
       .transition()
-      .attr('height', (d) => yScale(0) - yScale(d.newCases));
+      .attr('height', (d) => yScale(0) - yScale(d[barsKey]));
 
     const line = d3
       .line()
       .x((d) => xScale(new Date(d.date)))
-      .y((d) => yScale(+d.avgCases7Days))
+      .y((d) => yScale(d[lineKey]))
       .curve(d3.curveCardinal);
 
     // create line based on 7 day avg
@@ -149,7 +152,7 @@ export function NewCasesGraph({
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
       .attr('font-size', '0.9rem')
-      .text('Number of Cases');
+      .text(`Number of ${dataName}`);
 
     // add x axis and label
     const xAxis = svg.append('g').attr('class', 'x-axis').call(createXAxis);
@@ -187,7 +190,7 @@ export function NewCasesGraph({
       .attr('class', 'legend-text')
       .attr('x', margin.left + 153)
       .attr('y', height + margin.bottom - 15)
-      .text('New Cases')
+      .text(`New ${dataName}`)
       .style('font-size', '0.9rem')
       .attr('text-anchor', 'left')
       .style('alignment-baseline', 'middle');
@@ -213,7 +216,7 @@ export function NewCasesGraph({
           d3.event.offsetX < margin.left ||
           d3.event.offsetX > width - margin.right ||
           d3.event.offsetY < margin.top ||
-          d3.event.offsetY > height
+          d3.event.offsetY > height - margin.bottom
         )
           return;
         // select data point closest to mouse pointer
@@ -224,9 +227,9 @@ export function NewCasesGraph({
               new Date(dataPoint.date),
               'MMMM do',
             )}</div>
-           <div>Cases: ${formatNumber(dataPoint.newCases)}</div>
+           <div>${dataName}: ${formatNumber(dataPoint[barsKey])}</div>
            <div style="color: #666;">7 Day Avg: ${formatNumber(
-             dataPoint.avgCases7Days,
+             dataPoint[lineKey],
            )}</div>`,
           )
           .style('visibility', 'visible')
@@ -264,12 +267,14 @@ export function NewCasesGraph({
       drawChart();
     }
     return () => clearSVG();
-  }, [data]);
+  }, [data, barsKey]);
 
   return (
-    <div style={{ margin: '1rem' }}>
-      <Title>New reported cases by day</Title>
-      <Updated>*Last updated {format(new Date(lastUpdated), 'PPP @ p')}</Updated>
+    <div>
+      <Title>New reported {dataName.toLowerCase()} by day</Title>
+      <Updated>
+        *Last updated {format(new Date(lastUpdated), 'PPP @ p')}
+      </Updated>
       <svg
         width={GRAPHWIDTH}
         height={GRAPHHEIGHT}
@@ -285,16 +290,22 @@ NewCasesGraph.defaultProps = {
 };
 
 NewCasesGraph.propTypes = {
+  barsKey: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object),
-  selectedState: PropTypes.string.isRequired,
+  dataName: PropTypes.string.isRequired,
   fetchData: PropTypes.func.isRequired,
+  lineKey: PropTypes.string.isRequired,
+  selectedState: PropTypes.string.isRequired,
   storeDataFromCache: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  selectedState: state.selected.selected,
+  barsKey: state.graph.barsKey,
   data: state.dailyData.data,
+  dataName: state.graph.name,
   lastUpdated: state.dailyData.lastUpdated,
+  lineKey: state.graph.lineKey,
+  selectedState: state.selected.selected,
 });
 
 const mapDispatchToProps = (dispatch) => ({
