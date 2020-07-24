@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { format } from 'd3';
+import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
+import PropTypes from 'prop-types';
 
 import { requestCurrentStateData } from '../../../redux/actions/actions';
 
@@ -21,15 +23,20 @@ const Body = styled.tbody``;
 const Th = styled.th`
   font-size: 0.8rem;
   font-weight: 400;
-  text-align: right;
   vertical-align: bottom;
   color: #777;
   text-transform: uppercase;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
+  padding: 0.5rem 0;
+  text-align: left;
+  text-decoration: ${(props) => (props.sorted ? 'underline' : null)};
 
-  &:hover {
-    text-decoration: underline;
+  &:not(:first-child) {
+    padding-right: 1rem;
+    text-align: right;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
 
@@ -48,35 +55,95 @@ const State = styled(Td)`
 `;
 
 export function DataTable({ data, getCurrentData, meta }) {
+  const [sortConfig, setSortConfig] = useState({
+    key: 'deaths',
+    direction: 'descending',
+  });
+  const [sortedData, setSortedData] = useState(null);
+
   const formatNumber = format(',');
   useEffect(() => {
     getCurrentData();
   }, []);
 
+  useMemo(() => {
+    if (!data) return;
+    setSortedData(data);
+    const sortData = [...data];
+    if (sortConfig !== null) {
+      sortData.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    setSortedData(sortData);
+  }, [data, sortConfig]);
+
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
   return (
-    <Table>
-      <Head>
-        <Row>
-          <Th style={{ textAlign: 'left', paddingLeft: '0' }}>State</Th>
-          <Th>
-            Total
-            <br />
-            Deaths
-          </Th>
-          <Th>
-            Total
-            <br />
-            Cases
-          </Th>
-          <Th>
-            Tests <br />
-            Administered
-          </Th>
-        </Row>
-      </Head>
-      <Body>
-        {data && meta
-          ? data.map((state) => (
+    <>
+      {sortedData && meta ? (
+        <Table>
+          <Head>
+            <Row>
+              <Th>State</Th>
+              <Th
+                onClick={() => requestSort('deaths')}
+                sorted={sortConfig.key === 'deaths'}
+              >
+                {sortConfig.key === 'deaths' &&
+                  (sortConfig.direction === 'ascending' ? (
+                    <TiArrowSortedUp />
+                  ) : (
+                    <TiArrowSortedDown />
+                  ))}
+                Total
+                <br />
+                Deaths
+              </Th>
+              <Th
+                onClick={() => requestSort('totalCases')}
+                sorted={sortConfig.key === 'totalCases'}
+              >
+                {sortConfig.key === 'totalCases' &&
+                  (sortConfig.direction === 'ascending' ? (
+                    <TiArrowSortedUp />
+                  ) : (
+                    <TiArrowSortedDown />
+                  ))}
+                Total
+                <br />
+                Cases
+              </Th>
+              <Th
+                onClick={() => requestSort('tests')}
+                sorted={sortConfig.key === 'tests'}
+              >
+                {sortConfig.key === 'tests' &&
+                  (sortConfig.direction === 'ascending' ? (
+                    <TiArrowSortedUp />
+                  ) : (
+                    <TiArrowSortedDown />
+                  ))}
+                Tests <br />
+                Administered
+              </Th>
+            </Row>
+          </Head>
+          <Body>
+            {sortedData.map((state) => (
               <Row key={state.hash}>
                 <State>
                   {meta.find((current) => current.state === state.state).name}
@@ -85,12 +152,24 @@ export function DataTable({ data, getCurrentData, meta }) {
                 <Td>{formatNumber(state.totalCases)}</Td>
                 <Td>{formatNumber(state.tests)}</Td>
               </Row>
-            ))
-          : null}
-      </Body>
-    </Table>
+            ))}
+          </Body>
+        </Table>
+      ) : null}
+    </>
   );
 }
+
+DataTable.defaultProps = {
+  data: [],
+  meta: [],
+};
+
+DataTable.propTypes = {
+  data: PropTypes.array,
+  meta: PropTypes.array,
+  getCurrentData: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   data: state.currentData.data,
