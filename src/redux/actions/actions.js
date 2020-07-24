@@ -71,6 +71,14 @@ export const getCurrentStateDataFailure = (error) => ({
   error,
 });
 
+export const setGraphDataToNewDeaths = () => ({
+  type: types.SET_GRAPH_DATA_TO_NEW_DEATHS,
+});
+
+export const setGraphDataToNewCases = () => ({
+  type: types.SET_GRAPH_DATA_TO_NEW_CASES,
+});
+
 export const requestCurrentStateData = () => {
   return (dispatch) => {
     dispatch(getCurrentStateData());

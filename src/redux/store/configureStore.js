@@ -6,6 +6,7 @@ import metaReducer from '../reducers/meta';
 import selectedReducer from '../reducers/selected';
 import resourcesReducers from '../reducers/resources';
 import currentDataReducer from '../reducers/currentData';
+import graphReducer from '../reducers/graph';
 
 const rootReducer = combineReducers({
   dailyData: dailyDataReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   selected: selectedReducer,
   resources: resourcesReducers,
   currentData: currentDataReducer,
+  graph: graphReducer,
 });
 
 export default function configureStore() {
