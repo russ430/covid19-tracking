@@ -10,7 +10,9 @@ const Container = styled.div`
   margin: 1rem 0;
 `;
 
-const Sidebars = styled.div``;
+const Sidebars = styled.div`
+  flex: 1;
+`;
 
 export default function Main() {
   return (

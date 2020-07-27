@@ -11,7 +11,7 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  width: ${(props) => props.width}px;
+  width: ${(props) => props.width}%;
   height: 20px;
   background-color: #eee;
   margin-top: 0.5rem;
@@ -24,7 +24,7 @@ const PublishedDate = styled(Title)`
 `;
 
 const Content = styled(Title)`
-  width: 275px;
+  width: 80%;
   height: 12px;
   margin-top: 0.3rem;
 `;
@@ -32,8 +32,8 @@ const Content = styled(Title)`
 export default function ResourcePlaceholder() {
   return (
     <Container>
-      <Title width={245} />
-      <Title width={115} />
+      <Title width={90} />
+      <Title width={70} />
       <PublishedDate />
       <Content />
       <Content />

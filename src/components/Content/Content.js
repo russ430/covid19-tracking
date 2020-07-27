@@ -15,6 +15,7 @@ import NumericalData from './components/NumericalData';
 const Container = styled.section`
   padding: 0 0.5rem;
   margin: 0 auto;
+  flex: 4.5;
 `;
 
 const Title = styled.h2`
@@ -93,7 +94,14 @@ export function Content({
         </div>
         <NumericalData />
       </div>
-      <div style={{ marginTop: '1rem', padding: '1rem 0' }}>
+      <div
+        style={{
+          margin: '0 auto',
+          marginTop: '1rem',
+          padding: '1rem 0',
+          maxWidth: '900px',
+        }}
+      >
         <Header>Cases and Deaths by State</Header>
         <DataTable />
       </div>
