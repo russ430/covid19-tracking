@@ -7,6 +7,7 @@ export default function parseCurrentData(data) {
       tests: state.totalTestResults,
       state: state.state.toLowerCase(),
       caseRate: (state.positive / state.totalTestResults).toFixed(3),
+      newCases: state.positiveIncrease,
     };
   });
   return parsed;

@@ -5,7 +5,10 @@ import { format } from 'd3';
 import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
 import PropTypes from 'prop-types';
 
-import { requestCurrentStateData } from '../../../redux/actions/actions';
+import {
+  requestCurrentStateData,
+  selectState,
+} from '../../../redux/actions/actions';
 
 const Container = styled.div`
   margin: 0 auto;
@@ -64,6 +67,14 @@ const StateCell = styled(Td)`
   width: 25%;
 `;
 
+const StateText = styled.span`
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const Show = styled(Td)`
   background-color: #f9f9f9;
   text-align: center;
@@ -77,17 +88,16 @@ const Input = styled.input`
   border-radius: 5px;
 `;
 
-export function DataTable({ data, getCurrentData, meta }) {
+export function DataTable({ data, getCurrentData, meta, setSelectedState }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortConfig, setSortConfig] = useState({
-    key: 'deaths',
+    key: 'totalCases',
     direction: 'descending',
   });
   const [sortedData, setSortedData] = useState(null);
   const [filterConfig, setFilterConfig] = useState({ type: 'length', key: '' });
 
   const formatNumber = format(',');
-  const formatPercent = format('.1%');
 
   useEffect(() => {
     getCurrentData();
@@ -125,7 +135,7 @@ export function DataTable({ data, getCurrentData, meta }) {
     setSearchQuery(event.target.value);
     const query = event.target.value.toLowerCase();
     if (query === '') {
-      setFilterConfig({ type: '', key: '' });
+      setFilterConfig({ type: 'length', key: '' });
     } else {
       setFilterConfig({ type: 'search', key: query });
     }
@@ -157,20 +167,6 @@ export function DataTable({ data, getCurrentData, meta }) {
             <Row>
               <Th>State</Th>
               <Th
-                onClick={() => requestSort('deaths')}
-                sorted={sortConfig.key === 'deaths'}
-              >
-                {sortConfig.key === 'deaths' &&
-                  (sortConfig.direction === 'ascending' ? (
-                    <TiArrowSortedUp />
-                  ) : (
-                    <TiArrowSortedDown />
-                  ))}
-                Total
-                <br />
-                Deaths
-              </Th>
-              <Th
                 onClick={() => requestSort('totalCases')}
                 sorted={sortConfig.key === 'totalCases'}
               >
@@ -185,6 +181,34 @@ export function DataTable({ data, getCurrentData, meta }) {
                 Cases
               </Th>
               <Th
+                onClick={() => requestSort('newCases')}
+                sorted={sortConfig.key === 'newCases'}
+              >
+                {sortConfig.key === 'newCases' &&
+                  (sortConfig.direction === 'ascending' ? (
+                    <TiArrowSortedUp />
+                  ) : (
+                    <TiArrowSortedDown />
+                  ))}
+                Daily Cases
+                <br />
+                Increase
+              </Th>
+              <Th
+                onClick={() => requestSort('deaths')}
+                sorted={sortConfig.key === 'deaths'}
+              >
+                {sortConfig.key === 'deaths' &&
+                  (sortConfig.direction === 'ascending' ? (
+                    <TiArrowSortedUp />
+                  ) : (
+                    <TiArrowSortedDown />
+                  ))}
+                Total
+                <br />
+                Deaths
+              </Th>
+              <Th
                 onClick={() => requestSort('tests')}
                 sorted={sortConfig.key === 'tests'}
               >
@@ -197,29 +221,20 @@ export function DataTable({ data, getCurrentData, meta }) {
                 Tests <br />
                 Administered
               </Th>
-              <Th
-                onClick={() => requestSort('caseRate')}
-                sorted={sortConfig.key === 'caseRate'}
-              >
-                {sortConfig.key === 'caseRate' &&
-                  (sortConfig.direction === 'ascending' ? (
-                    <TiArrowSortedUp />
-                  ) : (
-                    <TiArrowSortedDown />
-                  ))}
-                Positve test
-                <br /> case rate
-              </Th>
             </Row>
           </Head>
           <Body>
             {filterTable().map((state) => (
               <Row key={state.hash}>
-                <StateCell>{meta[state.state].name}</StateCell>
-                <Td>{formatNumber(state.deaths)}</Td>
+                <StateCell>
+                  <StateText onClick={() => setSelectedState(state.state)}>
+                    {meta[state.state].name}
+                  </StateText>
+                </StateCell>
                 <Td>{formatNumber(state.totalCases)}</Td>
+                <Td>{formatNumber(state.newCases)}</Td>
+                <Td>{formatNumber(state.deaths)}</Td>
                 <Td>{formatNumber(state.tests)}</Td>
-                <Td>{formatPercent(state.caseRate)}</Td>
               </Row>
             ))}
             {filterConfig.type !== 'search' && (
@@ -234,7 +249,7 @@ export function DataTable({ data, getCurrentData, meta }) {
                   }
                   colSpan="5"
                 >
-                  See {filterConfig.type === 'length' ? 'More' : 'Less'}
+                  Show {filterConfig.type === 'length' ? 'all' : 'less'}
                 </Show>
               </Row>
             )}
@@ -263,6 +278,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getCurrentData: () => dispatch(requestCurrentStateData()),
+  setSelectedState: (state) => dispatch(selectState(state)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DataTable);
