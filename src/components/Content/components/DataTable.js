@@ -7,13 +7,18 @@ import PropTypes from 'prop-types';
 
 import { requestCurrentStateData } from '../../../redux/actions/actions';
 
+const Container = styled.div`
+  margin: 0 auto;
+  width: 80%;
+`;
+
 const Table = styled.table`
   border-collapse: collapse;
-  margin: 0 auto;
+  width: 100%;
 `;
 
 const Row = styled.tr`
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #e0e0e0;
 `;
 
 const Head = styled.thead``;
@@ -28,12 +33,14 @@ const Th = styled.th`
   text-transform: uppercase;
   padding: 0.5rem 0;
   text-align: left;
+  width: 25%;
   text-decoration: ${(props) => (props.sorted ? 'underline' : null)};
 
   &:not(:first-child) {
     padding-right: 1rem;
     text-align: right;
     cursor: pointer;
+    width: 18.75%;
     &:hover {
       text-decoration: underline;
     }
@@ -47,28 +54,47 @@ const Td = styled.td`
   color: #111;
   text-transform: none;
   padding: 0.5rem 1rem;
+  width: 18.75%;
 `;
 
-const State = styled(Td)`
+const StateCell = styled(Td)`
   text-align: left;
   padding-left: 0;
+  padding-right: 0;
+  width: 25%;
+`;
+
+const Show = styled(Td)`
+  background-color: #f9f9f9;
+  text-align: center;
+  padding: 1rem 0;
+  cursor: pointer;
+`;
+
+const Input = styled.input`
+  padding: 0.5rem;
+  border: 1px solid #aaa;
+  border-radius: 5px;
 `;
 
 export function DataTable({ data, getCurrentData, meta }) {
+  const [searchQuery, setSearchQuery] = useState('');
   const [sortConfig, setSortConfig] = useState({
     key: 'deaths',
     direction: 'descending',
   });
   const [sortedData, setSortedData] = useState(null);
+  const [filterConfig, setFilterConfig] = useState({ type: 'length', key: '' });
 
   const formatNumber = format(',');
+  const formatPercent = format('.1%');
+
   useEffect(() => {
     getCurrentData();
   }, []);
 
   useMemo(() => {
     if (!data) return;
-    setSortedData(data);
     const sortData = [...data];
     if (sortConfig !== null) {
       sortData.sort((a, b) => {
@@ -86,14 +112,45 @@ export function DataTable({ data, getCurrentData, meta }) {
 
   const requestSort = (key) => {
     let direction = 'ascending';
+    if (sortConfig.key !== key && sortConfig.direction === 'descending') {
+      direction = 'descending';
+    }
     if (sortConfig.key === key && sortConfig.direction === 'ascending') {
       direction = 'descending';
     }
     setSortConfig({ key, direction });
   };
 
+  const handleInputChange = (event) => {
+    setSearchQuery(event.target.value);
+    const query = event.target.value.toLowerCase();
+    if (query === '') {
+      setFilterConfig({ type: '', key: '' });
+    } else {
+      setFilterConfig({ type: 'search', key: query });
+    }
+  };
+
+  const filterTable = () => {
+    switch (filterConfig.type) {
+      case 'length':
+        return sortedData.filter((_, index) => index < 10);
+      case 'search':
+        return sortedData.filter((state) =>
+          meta[state.state].name.toLowerCase().includes(filterConfig.key),
+        );
+      default:
+        return sortedData;
+    }
+  };
+
   return (
-    <>
+    <Container>
+      <Input
+        onChange={(event) => handleInputChange(event)}
+        value={searchQuery}
+        placeholder="Search"
+      />
       {sortedData && meta ? (
         <Table>
           <Head>
@@ -140,34 +197,62 @@ export function DataTable({ data, getCurrentData, meta }) {
                 Tests <br />
                 Administered
               </Th>
+              <Th
+                onClick={() => requestSort('caseRate')}
+                sorted={sortConfig.key === 'caseRate'}
+              >
+                {sortConfig.key === 'caseRate' &&
+                  (sortConfig.direction === 'ascending' ? (
+                    <TiArrowSortedUp />
+                  ) : (
+                    <TiArrowSortedDown />
+                  ))}
+                Positve test
+                <br /> case rate
+              </Th>
             </Row>
           </Head>
           <Body>
-            {sortedData.map((state) => (
+            {filterTable().map((state) => (
               <Row key={state.hash}>
-                <State>
-                  {meta.find((current) => current.state === state.state).name}
-                </State>
+                <StateCell>{meta[state.state].name}</StateCell>
                 <Td>{formatNumber(state.deaths)}</Td>
                 <Td>{formatNumber(state.totalCases)}</Td>
                 <Td>{formatNumber(state.tests)}</Td>
+                <Td>{formatPercent(state.caseRate)}</Td>
               </Row>
             ))}
+            {filterConfig.type !== 'search' && (
+              <Row>
+                <Show
+                  onClick={() =>
+                    setFilterConfig((prev) =>
+                      prev.type === 'length'
+                        ? { type: '', key: '' }
+                        : { type: 'length', key: '' },
+                    )
+                  }
+                  colSpan="5"
+                >
+                  See {filterConfig.type === 'length' ? 'More' : 'Less'}
+                </Show>
+              </Row>
+            )}
           </Body>
         </Table>
       ) : null}
-    </>
+    </Container>
   );
 }
 
 DataTable.defaultProps = {
   data: [],
-  meta: [],
+  meta: {},
 };
 
 DataTable.propTypes = {
   data: PropTypes.array,
-  meta: PropTypes.array,
+  meta: PropTypes.object,
   getCurrentData: PropTypes.func.isRequired,
 };
 
