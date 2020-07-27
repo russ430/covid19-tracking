@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import bisect from '../../../utils/bisect';
 import {
-  requestDailyData,
+  requestStateDailyData,
   getDailyDataSuccess,
 } from '../../../redux/actions/actions';
 
@@ -309,7 +309,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchData: (state) => dispatch(requestDailyData(state)),
+  fetchData: (state) => dispatch(requestStateDailyData(state)),
   storeDataFromCache: (data) => dispatch(getDailyDataSuccess(data)),
 });
 

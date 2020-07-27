@@ -7,7 +7,7 @@ describe('resource reducer', () => {
   });
 
   it('handles GET_RESOURCES', () => {
-    expect(reducer(initialState, actions.getResources())).toEqual({
+    expect(reducer(initialState, actions.getCDCResources())).toEqual({
       ...initialState,
       isFetching: true,
       error: null,
@@ -19,7 +19,7 @@ describe('resource reducer', () => {
     expect(
       reducer(
         { ...initialState, isFetching: true },
-        actions.getResourcesSuccess(resources),
+        actions.getCDCResourcesSuccess(resources),
       ),
     ).toEqual({
       ...initialState,
@@ -33,7 +33,7 @@ describe('resource reducer', () => {
     expect(
       reducer(
         { ...initialState, isFetching: true },
-        actions.getResourcesFailure(error),
+        actions.getCDCResourcesFailure(error),
       ),
     );
   });

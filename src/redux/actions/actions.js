@@ -1,9 +1,9 @@
 import {
-  fetchResources,
-  fetchCurrentStateData,
+  fetchCDCResources,
+  fetchAllStatesCurrentData,
   fetchAllStatesMeta,
-  fetchDailyData,
-} from '../../api/api';
+  fetchStateDailyData,
+} from '../api/api';
 import parseMetaData from '../../utils/parseMetaData';
 import parseDailyData from '../../utils/parseDailyData';
 import parseCurrentData from '../../utils/parseCurrentData';
@@ -43,16 +43,16 @@ export const getDailyDataFailure = (error) => ({
   error,
 });
 
-export const getResources = () => ({
+export const getCDCResources = () => ({
   type: types.GET_RESOURCES,
 });
 
-export const getResourcesSuccess = (resources) => ({
+export const getCDCResourcesSuccess = (resources) => ({
   type: types.GET_RESOURCES_SUCCESS,
   resources,
 });
 
-export const getResourcesFailure = (error) => ({
+export const getCDCResourcesFailure = (error) => ({
   type: types.GET_RESOURCES_FAILURE,
   error,
 });
@@ -82,7 +82,7 @@ export const setGraphDataToNewCases = () => ({
 export const requestCurrentStateData = () => {
   return (dispatch) => {
     dispatch(getCurrentStateData());
-    return fetchCurrentStateData().then(
+    return fetchAllStatesCurrentData().then(
       ({ data }) =>
         dispatch(getCurrentStateDataSuccess(parseCurrentData(data))),
       (error) => dispatch(getCurrentStateDataFailure(error)),
@@ -90,12 +90,12 @@ export const requestCurrentStateData = () => {
   };
 };
 
-export const requestResources = () => {
+export const requestCDCResources = () => {
   return (dispatch) => {
-    dispatch(getResources());
-    return fetchResources().then(
-      ({ items }) => dispatch(getResourcesSuccess(items.slice(0, 20))),
-      (error) => dispatch(getResourcesFailure(error)),
+    dispatch(getCDCResources());
+    return fetchCDCResources().then(
+      ({ items }) => dispatch(getCDCResourcesSuccess(items.slice(0, 20))),
+      (error) => dispatch(getCDCResourcesFailure(error)),
     );
   };
 };
@@ -114,10 +114,10 @@ export const requestAllStatesMeta = () => {
   };
 };
 
-export const requestDailyData = (state) => {
+export const requestStateDailyData = (state) => {
   return (dispatch) => {
     dispatch(getDailyData());
-    return fetchDailyData(state)
+    return fetchStateDailyData(state)
       .then(({ data }) => {
         // move current dates to end of array
         data.reverse();

@@ -8,7 +8,7 @@ import Sidebar from './components/Sidebar';
 import dummyPlaceholders from '../../utils/dummyVariables/resourcesPlaceholders';
 import ResourcePlaceholder from '../PlaceHolders/ResourcePlaceholder';
 import Article from './components/Article';
-import { requestResources } from '../../redux/actions/actions';
+import { requestCDCResources } from '../../redux/actions/actions';
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -63,7 +63,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getResources: () => dispatch(requestResources()),
+  getResources: () => dispatch(requestCDCResources()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResourceSidebar);
