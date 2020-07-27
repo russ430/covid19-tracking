@@ -68,9 +68,7 @@ export function Content({
   return (
     <Container>
       <Title>
-        {selectedState === 'all'
-          ? 'United States'
-          : meta.find((state) => state.state === selectedState).name}
+        {selectedState === 'all' ? 'United States' : meta[selectedState].name}
       </Title>
       <Load>{isFetching && <Loader />}</Load>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -104,12 +102,12 @@ export function Content({
 }
 
 Content.defaultProps = {
-  meta: [{}],
+  meta: {},
 };
 
 Content.propTypes = {
   selectedState: PropTypes.string.isRequired,
-  meta: PropTypes.arrayOf(PropTypes.object),
+  meta: PropTypes.object,
   isFetching: PropTypes.bool.isRequired,
   graphSelected: PropTypes.string.isRequired,
 };

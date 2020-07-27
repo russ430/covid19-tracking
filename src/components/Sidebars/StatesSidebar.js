@@ -38,7 +38,7 @@ const State = styled.h3`
   align-self: flex-start;
 `;
 
-export function StatesSidebar({ states, getMeta, selected, setSelected }) {
+export function StatesSidebar({ meta, getMeta, selected, setSelected }) {
   useEffect(() => {
     getMeta();
   }, []);
@@ -52,7 +52,7 @@ export function StatesSidebar({ states, getMeta, selected, setSelected }) {
       <Title>States/Territories</Title>
       <Line />
       <Sidebar>
-        {states ? (
+        {meta ? (
           <>
             <State
               selected={selected === 'all'}
@@ -60,15 +60,17 @@ export function StatesSidebar({ states, getMeta, selected, setSelected }) {
             >
               US Totals
             </State>
-            {states.map((state) => (
-              <State
-                selected={selected === state.state}
-                key={state.id}
-                onClick={() => handleOnClick(state.state)}
-              >
-                {state.name}
-              </State>
-            ))}
+            {Object.keys(meta)
+              .sort((a, b) => (meta[a].name > meta[b].name ? 1 : -1))
+              .map((state) => (
+                <State
+                  selected={selected === state}
+                  key={meta[state].id}
+                  onClick={() => handleOnClick(meta[state].state)}
+                >
+                  {meta[state].name}
+                </State>
+              ))}
           </>
         ) : (
           dummyStates.map((_, i) => (
@@ -81,18 +83,18 @@ export function StatesSidebar({ states, getMeta, selected, setSelected }) {
 }
 
 StatesSidebar.defaultProps = {
-  states: [{}],
+  meta: {},
 };
 
 StatesSidebar.propTypes = {
-  states: PropTypes.arrayOf(PropTypes.object),
+  meta: PropTypes.object,
   selected: PropTypes.string.isRequired,
   getMeta: PropTypes.func.isRequired,
   setSelected: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  states: state.meta.meta,
+  meta: state.meta.meta,
   selected: state.selected.selected,
 });
 
