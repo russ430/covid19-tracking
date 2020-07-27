@@ -6,6 +6,7 @@ export default function parseCurrentData(data) {
       deaths: state.death,
       tests: state.totalTestResults,
       state: state.state.toLowerCase(),
+      caseRate: (state.positive / state.totalTestResults).toFixed(3),
     };
   });
   return parsed;
