@@ -56,9 +56,9 @@ export function NumericalData({ data }) {
   return (
     <Container>
       <Label>TOTAL CASES:</Label>
-      <Data>{cases}</Data>
+      <Data data-testid="cases">{cases}</Data>
       <Label>TOTAL DEATHS:</Label>
-      <Data>{deaths}</Data>
+      <Data data-testid="deaths">{deaths}</Data>
       <Note>*Includes confirmed and probable deaths where available</Note>
     </Container>
   );
