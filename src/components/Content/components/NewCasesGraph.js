@@ -277,7 +277,9 @@ export function NewCasesGraph({
   return (
     <div>
       <ErrorModal visible={error} onClose={clearError}>
-        Unable to retrieve data for {selectedState === 'all' ? 'the U.S' : meta[selectedState].name}. Please try again later
+        Unable to retrieve data for{' '}
+        {selectedState === 'all' ? 'the U.S' : meta[selectedState].name}. Please
+        try again later
       </ErrorModal>
       <Title>New reported {dataName.toLowerCase()} by day</Title>
       <Updated>
