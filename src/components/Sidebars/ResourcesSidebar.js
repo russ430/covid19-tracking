@@ -3,10 +3,10 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { range as d3range } from 'd3';
 
 import ErrorModal from '../ErrorModal/ErrorModal';
 import Sidebar from './components/Sidebar';
-import dummyPlaceholders from '../../utils/dummyVariables/resourcesPlaceholders';
 import ResourcePlaceholder from '../PlaceHolders/ResourcePlaceholder';
 import Article from './components/Article';
 import {
@@ -57,7 +57,7 @@ export function ResourceSidebar({
               <Article data={article} key={article.title} />
             ))
           : isFetching &&
-            dummyPlaceholders.map((_, i) => <ResourcePlaceholder key={i} />)}
+            d3range(20).map((_, i) => <ResourcePlaceholder key={i} />)}
       </Sidebar>
     </Container>
   );
