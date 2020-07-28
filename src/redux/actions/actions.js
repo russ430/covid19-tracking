@@ -44,16 +44,16 @@ export const getDailyDataFailure = (error) => ({
 });
 
 export const getCDCResources = () => ({
-  type: types.GET_RESOURCES,
+  type: types.GET_CDC_RESOURCES,
 });
 
 export const getCDCResourcesSuccess = (resources) => ({
-  type: types.GET_RESOURCES_SUCCESS,
+  type: types.GET_CDC_RESOURCES_SUCCESS,
   resources,
 });
 
 export const getCDCResourcesFailure = (error) => ({
-  type: types.GET_RESOURCES_FAILURE,
+  type: types.GET_CDC_RESOURCES_FAILURE,
   error,
 });
 
@@ -81,6 +81,14 @@ export const setGraphDataToNewCases = () => ({
 
 export const clearCurrentStateDataError = () => ({
   type: types.CLEAR_CURRENT_STATE_DATA_ERROR,
+});
+
+export const clearDailyDataError = () => ({
+  type: types.CLEAR_DAILY_DATA_ERROR,
+});
+
+export const clearResourcesError = () => ({
+  type: types.CLEAR_CDC_RESOURCES_ERROR,
 });
 
 export const requestCurrentStateData = () => {

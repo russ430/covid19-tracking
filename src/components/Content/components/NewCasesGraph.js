@@ -1,15 +1,17 @@
 /* eslint-disable no-shadow */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as d3 from 'd3';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+import ErrorModal from '../../ErrorModal/ErrorModal';
 import bisect from '../../../utils/bisect';
 import {
   requestStateDailyData,
   getDailyDataSuccess,
+  clearDailyDataError,
 } from '../../../redux/actions/actions';
 
 const Title = styled.h2`
@@ -44,15 +46,17 @@ export function NewCasesGraph({
   lastUpdated,
   barsKey,
   lineKey,
+  error,
+  clearError,
+  meta,
 }) {
   const formatNumber = d3.format(',');
-  const svgRef = useRef();
-  const svg = d3.select(svgRef.current);
   const margin = { top: 20, right: 0, bottom: 30, left: 20 };
   const width = GRAPHWIDTH - margin.right - margin.left;
   const height = GRAPHHEIGHT - margin.top - margin.bottom;
 
-  const drawChart = () => {
+  const drawGraph = () => {
+    const svg = d3.select('.svg-graph');
     const barScale = d3
       .scaleBand()
       .domain(d3.range(data.length))
@@ -242,6 +246,7 @@ export function NewCasesGraph({
   };
 
   const clearSVG = () => {
+    const svg = d3.select('.svg-graph');
     svg.select('.y-axis').remove();
     svg.select('.x-axis').remove();
     svg.select('.y-axis-label').remove();
@@ -264,29 +269,28 @@ export function NewCasesGraph({
   useEffect(() => {
     if (data) {
       sessionStorage.setItem(selectedState, JSON.stringify(data));
-      drawChart();
+      drawGraph();
     }
     return () => clearSVG();
   }, [data, barsKey]);
 
   return (
     <div>
+      <ErrorModal visible={error} onClose={clearError}>
+        Unable to retrieve data for {selectedState === 'all' ? 'the U.S' : meta[selectedState].name}. Please try again later
+      </ErrorModal>
       <Title>New reported {dataName.toLowerCase()} by day</Title>
       <Updated>
         *Last updated {format(new Date(lastUpdated), 'PPP @ p')}
       </Updated>
-      <svg
-        width={GRAPHWIDTH}
-        height={GRAPHHEIGHT}
-        ref={svgRef}
-        className="svg"
-      />
+      <svg width={GRAPHWIDTH} height={GRAPHHEIGHT} className="svg-graph" />
     </div>
   );
 }
 
 NewCasesGraph.defaultProps = {
   data: [{}],
+  error: null,
 };
 
 NewCasesGraph.propTypes = {
@@ -297,6 +301,7 @@ NewCasesGraph.propTypes = {
   lineKey: PropTypes.string.isRequired,
   selectedState: PropTypes.string.isRequired,
   storeDataFromCache: PropTypes.func.isRequired,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({
@@ -306,11 +311,14 @@ const mapStateToProps = (state) => ({
   lastUpdated: state.dailyData.lastUpdated,
   lineKey: state.graph.lineKey,
   selectedState: state.selected.selected,
+  error: state.dailyData.error,
+  meta: state.meta.meta,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchData: (state) => dispatch(requestStateDailyData(state)),
   storeDataFromCache: (data) => dispatch(getDailyDataSuccess(data)),
+  clearError: () => dispatch(clearDailyDataError()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewCasesGraph);

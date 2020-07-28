@@ -8,23 +8,28 @@ export const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.GET_RESOURCES:
+    case types.GET_CDC_RESOURCES:
       return {
         ...state,
         isFetching: true,
         error: null,
       };
-    case types.GET_RESOURCES_SUCCESS:
+    case types.GET_CDC_RESOURCES_SUCCESS:
       return {
         ...state,
         isFetching: false,
         resources: action.resources,
       };
-    case types.GET_RESOURCES_FAILURE:
+    case types.GET_CDC_RESOURCES_FAILURE:
       return {
         ...state,
         isFetching: false,
         error: action.error,
+      };
+    case types.CLEAR_CDC_RESOURCES_ERROR:
+      return {
+        ...state,
+        error: null,
       };
     default:
       return state;
