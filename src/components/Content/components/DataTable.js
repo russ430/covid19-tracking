@@ -5,9 +5,11 @@ import { format } from 'd3';
 import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
 import PropTypes from 'prop-types';
 
+import ErrorModal from '../../ErrorModal/ErrorModal';
 import {
   requestCurrentStateData,
   selectState,
+  clearCurrentStateDataError,
 } from '../../../redux/actions/actions';
 
 const Container = styled.div`
@@ -88,7 +90,14 @@ const Input = styled.input`
   border-radius: 5px;
 `;
 
-export function DataTable({ data, getCurrentData, meta, setSelectedState }) {
+export function DataTable({
+  data,
+  getCurrentData,
+  meta,
+  setSelectedState,
+  error,
+  clearError,
+}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortConfig, setSortConfig] = useState({
     key: 'totalCases',
@@ -156,105 +165,111 @@ export function DataTable({ data, getCurrentData, meta, setSelectedState }) {
 
   return (
     <Container>
-      <Input
-        onChange={(event) => handleInputChange(event)}
-        value={searchQuery}
-        placeholder="Search"
-      />
+      <ErrorModal visible={error} onClose={clearError}>
+        Something went wrong retrieving cases and deaths by state. Please try
+        again later.
+      </ErrorModal>
       {sortedData && meta ? (
-        <Table>
-          <Head>
-            <Row>
-              <Th>State</Th>
-              <Th
-                onClick={() => requestSort('totalCases')}
-                sorted={sortConfig.key === 'totalCases'}
-              >
-                {sortConfig.key === 'totalCases' &&
-                  (sortConfig.direction === 'ascending' ? (
-                    <TiArrowSortedUp />
-                  ) : (
-                    <TiArrowSortedDown />
-                  ))}
-                Total
-                <br />
-                Cases
-              </Th>
-              <Th
-                onClick={() => requestSort('newCases')}
-                sorted={sortConfig.key === 'newCases'}
-              >
-                {sortConfig.key === 'newCases' &&
-                  (sortConfig.direction === 'ascending' ? (
-                    <TiArrowSortedUp />
-                  ) : (
-                    <TiArrowSortedDown />
-                  ))}
-                Daily Cases
-                <br />
-                Increase
-              </Th>
-              <Th
-                onClick={() => requestSort('deaths')}
-                sorted={sortConfig.key === 'deaths'}
-              >
-                {sortConfig.key === 'deaths' &&
-                  (sortConfig.direction === 'ascending' ? (
-                    <TiArrowSortedUp />
-                  ) : (
-                    <TiArrowSortedDown />
-                  ))}
-                Total
-                <br />
-                Deaths
-              </Th>
-              <Th
-                onClick={() => requestSort('tests')}
-                sorted={sortConfig.key === 'tests'}
-              >
-                {sortConfig.key === 'tests' &&
-                  (sortConfig.direction === 'ascending' ? (
-                    <TiArrowSortedUp />
-                  ) : (
-                    <TiArrowSortedDown />
-                  ))}
-                Tests <br />
-                Administered
-              </Th>
-            </Row>
-          </Head>
-          <Body>
-            {filterTable().map((state) => (
-              <Row key={state.hash}>
-                <StateCell>
-                  <StateText onClick={() => setSelectedState(state.state)}>
-                    {meta[state.state].name}
-                  </StateText>
-                </StateCell>
-                <Td>{formatNumber(state.totalCases)}</Td>
-                <Td>{formatNumber(state.newCases)}</Td>
-                <Td>{formatNumber(state.deaths)}</Td>
-                <Td>{formatNumber(state.tests)}</Td>
-              </Row>
-            ))}
-            {filterConfig.type !== 'search' && (
+        <>
+          <Input
+            onChange={(event) => handleInputChange(event)}
+            value={searchQuery}
+            placeholder="Search"
+          />
+          <Table>
+            <Head>
               <Row>
-                <Show
-                  onClick={() =>
-                    setFilterConfig((prev) =>
-                      prev.type === 'length'
-                        ? { type: '', key: '' }
-                        : { type: 'length', key: '' },
-                    )
-                  }
-                  colSpan="5"
+                <Th>&nbsp;</Th>
+                <Th
+                  onClick={() => requestSort('totalCases')}
+                  sorted={sortConfig.key === 'totalCases'}
                 >
-                  Show {filterConfig.type === 'length' ? 'all' : 'less'}
-                </Show>
+                  {sortConfig.key === 'totalCases' &&
+                    (sortConfig.direction === 'ascending' ? (
+                      <TiArrowSortedUp />
+                    ) : (
+                      <TiArrowSortedDown />
+                    ))}
+                  Total
+                  <br />
+                  Cases
+                </Th>
+                <Th
+                  onClick={() => requestSort('newCases')}
+                  sorted={sortConfig.key === 'newCases'}
+                >
+                  {sortConfig.key === 'newCases' &&
+                    (sortConfig.direction === 'ascending' ? (
+                      <TiArrowSortedUp />
+                    ) : (
+                      <TiArrowSortedDown />
+                    ))}
+                  Daily Cases
+                  <br />
+                  Increase
+                </Th>
+                <Th
+                  onClick={() => requestSort('deaths')}
+                  sorted={sortConfig.key === 'deaths'}
+                >
+                  {sortConfig.key === 'deaths' &&
+                    (sortConfig.direction === 'ascending' ? (
+                      <TiArrowSortedUp />
+                    ) : (
+                      <TiArrowSortedDown />
+                    ))}
+                  Total
+                  <br />
+                  Deaths
+                </Th>
+                <Th
+                  onClick={() => requestSort('tests')}
+                  sorted={sortConfig.key === 'tests'}
+                >
+                  {sortConfig.key === 'tests' &&
+                    (sortConfig.direction === 'ascending' ? (
+                      <TiArrowSortedUp />
+                    ) : (
+                      <TiArrowSortedDown />
+                    ))}
+                  Tests <br />
+                  Administered
+                </Th>
               </Row>
-            )}
-          </Body>
-        </Table>
+            </Head>
+            <Body>
+              {filterTable().map((state) => (
+                <Row key={state.hash}>
+                  <StateCell>
+                    <StateText onClick={() => setSelectedState(state.state)}>
+                      {meta[state.state].name}
+                    </StateText>
+                  </StateCell>
+                  <Td>{formatNumber(state.totalCases)}</Td>
+                  <Td>{formatNumber(state.newCases)}</Td>
+                  <Td>{formatNumber(state.deaths)}</Td>
+                  <Td>{formatNumber(state.tests)}</Td>
+                </Row>
+              ))}
+              {filterConfig.type !== 'search' && (
+                <Row>
+                  <Show
+                    onClick={() =>
+                      setFilterConfig((prev) =>
+                        prev.type === 'length'
+                          ? { type: '', key: '' }
+                          : { type: 'length', key: '' },
+                      )
+                    }
+                    colSpan="5"
+                  >
+                    Show {filterConfig.type === 'length' ? 'all' : 'less'}
+                  </Show>
+                </Row>
+              )}
+            </Body>
+          </Table>
+        </>
       ) : null}
     </Container>
   );
@@ -263,22 +278,26 @@ export function DataTable({ data, getCurrentData, meta, setSelectedState }) {
 DataTable.defaultProps = {
   data: [],
   meta: {},
+  error: null,
 };
 
 DataTable.propTypes = {
   data: PropTypes.array,
   meta: PropTypes.object,
   getCurrentData: PropTypes.func.isRequired,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({
   data: state.currentData.data,
   meta: state.meta.meta,
+  error: state.currentData.error,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getCurrentData: () => dispatch(requestCurrentStateData()),
   setSelectedState: (state) => dispatch(selectState(state)),
+  clearError: () => dispatch(clearCurrentStateDataError()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DataTable);
