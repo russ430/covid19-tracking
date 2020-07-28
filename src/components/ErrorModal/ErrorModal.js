@@ -48,7 +48,7 @@ export default function ErrorModal({ visible, children, onClose }) {
             <Close onClick={onClose}>
               <GrClose size="1.7rem" />
             </Close>
-            <Text>{children}</Text>
+            <Text data-testid="children">{children}</Text>
           </Modal>
         </Container>
       )}

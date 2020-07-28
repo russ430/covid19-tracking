@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { range as d3range } from 'd3';
 
-import ErrorModal from '../ErrorModal/ErrorModal';
+import ErrorModal from '../../../ErrorModal/ErrorModal';
 import Sidebar from './components/Sidebar';
-import ResourcePlaceholder from '../PlaceHolders/ResourcePlaceholder';
+import ResourcePlaceholder from './components/ResourcePlaceholder';
 import Article from './components/Article';
 import {
   requestCDCResources,
   clearCDCResourcesError,
-} from '../../redux/actions/actions';
+} from '../../../../redux/actions/actions';
 
 const Container = styled.div`
   margin-top: 1rem;

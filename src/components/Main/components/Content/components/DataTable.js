@@ -5,12 +5,12 @@ import { format } from 'd3';
 import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
 import PropTypes from 'prop-types';
 
-import ErrorModal from '../../ErrorModal/ErrorModal';
+import ErrorModal from '../../../../ErrorModal/ErrorModal';
 import {
   requestCurrentStateData,
   selectState,
   clearCurrentStateDataError,
-} from '../../../redux/actions/actions';
+} from '../../../../../redux/actions/actions';
 
 const Container = styled.div`
   margin: 0 auto;

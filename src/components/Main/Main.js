@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import StateSidebar from '../Sidebars/StatesSidebar';
-import Content from '../Content/Content';
-import ResourcesSidebar from '../Sidebars/ResourcesSidebar';
+import StateSidebar from './components/Sidebars/StatesSidebar';
+import ResourcesSidebar from './components/Sidebars/ResourcesSidebar';
+import Content from './components/Content/Content';
 
 const Container = styled.div`
   display: flex;

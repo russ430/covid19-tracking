@@ -6,13 +6,13 @@ import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import ErrorModal from '../../ErrorModal/ErrorModal';
-import bisect from '../../../utils/bisect';
+import ErrorModal from '../../../../ErrorModal/ErrorModal';
+import bisect from '../../../../../utils/bisect';
 import {
   requestStateDailyData,
   getDailyDataSuccess,
   clearDailyDataError,
-} from '../../../redux/actions/actions';
+} from '../../../../../redux/actions/actions';
 
 const Title = styled.h2`
   font-family: 'Open Sans', sans-serif;

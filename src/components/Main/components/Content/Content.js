@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 import {
   setGraphDataToNewCases,
   setGraphDataToNewDeaths,
-} from '../../redux/actions/actions';
+} from '../../../../redux/actions/actions';
 import DataTable from './components/DataTable';
-import Loader from '../Loader/Loader';
+import Loader from '../../../Loader/Loader';
 import NewCasesGraph from './components/NewCasesGraph';
 import NumericalData from './components/NumericalData';
 

@@ -5,15 +5,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { range as d3range } from 'd3';
 
-import ErrorModal from '../ErrorModal/ErrorModal';
+import ErrorModal from '../../../ErrorModal/ErrorModal';
 import Sidebar from './components/Sidebar';
-import getRandomInt from '../../utils/getRandomInt';
+import getRandomInt from '../../../../utils/getRandomInt';
 import {
   requestAllStatesMeta,
   selectState,
   clearAllStatesMetaError,
-} from '../../redux/actions/actions';
-import StatesPlaceholder from '../PlaceHolders/StatePlaceholder';
+} from '../../../../redux/actions/actions';
+import StatesPlaceholder from './components/StatePlaceholder';
 
 const Container = styled.div`
   margin-bottom: 2rem;
