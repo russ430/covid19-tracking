@@ -3,11 +3,16 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { range as d3range } from 'd3';
 
+import ErrorModal from '../ErrorModal/ErrorModal';
 import Sidebar from './components/Sidebar';
-import dummyStates from '../../utils/dummyVariables/statesPlaceholders';
 import getRandomInt from '../../utils/getRandomInt';
-import { requestAllStatesMeta, selectState } from '../../redux/actions/actions';
+import {
+  requestAllStatesMeta,
+  selectState,
+  clearAllStatesMetaError,
+} from '../../redux/actions/actions';
 import StatesPlaceholder from '../PlaceHolders/StatePlaceholder';
 
 const Container = styled.div`
@@ -38,7 +43,15 @@ const State = styled.h3`
   align-self: flex-start;
 `;
 
-export function StatesSidebar({ meta, getMeta, selected, setSelected }) {
+export function StatesSidebar({
+  meta,
+  getMeta,
+  selected,
+  setSelected,
+  error,
+  clearError,
+  isFetching,
+}) {
   useEffect(() => {
     getMeta();
   }, []);
@@ -49,6 +62,9 @@ export function StatesSidebar({ meta, getMeta, selected, setSelected }) {
 
   return (
     <Container>
+      <ErrorModal visible={error} onClose={clearError}>
+        Unable to retrieve state data. Please try again later.
+      </ErrorModal>
       <Title>States/Territories</Title>
       <Line />
       <Sidebar>
@@ -73,7 +89,8 @@ export function StatesSidebar({ meta, getMeta, selected, setSelected }) {
               ))}
           </>
         ) : (
-          dummyStates.map((_, i) => (
+          isFetching &&
+          d3range(56).map((_, i) => (
             <StatesPlaceholder key={i} width={getRandomInt(75, 135)} />
           ))
         )}
@@ -84,6 +101,7 @@ export function StatesSidebar({ meta, getMeta, selected, setSelected }) {
 
 StatesSidebar.defaultProps = {
   meta: {},
+  error: null,
 };
 
 StatesSidebar.propTypes = {
@@ -91,16 +109,20 @@ StatesSidebar.propTypes = {
   selected: PropTypes.string.isRequired,
   getMeta: PropTypes.func.isRequired,
   setSelected: PropTypes.func.isRequired,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({
   meta: state.meta.meta,
   selected: state.selected.selected,
+  error: state.meta.error,
+  isFetching: state.meta.isFetching,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getMeta: () => dispatch(requestAllStatesMeta()),
   setSelected: (state) => dispatch(selectState(state)),
+  clearError: () => dispatch(clearAllStatesMetaError()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StatesSidebar);

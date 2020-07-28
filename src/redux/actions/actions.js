@@ -91,6 +91,10 @@ export const clearResourcesError = () => ({
   type: types.CLEAR_CDC_RESOURCES_ERROR,
 });
 
+export const clearAllStatesMetaError = () => ({
+  type: types.CLEAR_ALL_STATES_META_ERROR,
+});
+
 export const requestCurrentStateData = () => {
   return (dispatch) => {
     dispatch(getCurrentStateData());
@@ -121,7 +125,7 @@ export const requestAllStatesMeta = () => {
         dispatch(getAllStatesMetaSuccess(meta));
       })
       .catch((error) => {
-        getAllStatesMetaFailure(error);
+        dispatch(getAllStatesMetaFailure(error));
       });
   };
 };

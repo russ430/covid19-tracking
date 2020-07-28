@@ -25,6 +25,11 @@ const reducer = (state = initialState, action) => {
         error: action.error,
         isFetching: false,
       };
+    case types.CLEAR_ALL_STATES_META_ERROR:
+      return {
+        ...state,
+        error: null,
+      };
     default:
       return state;
   }
