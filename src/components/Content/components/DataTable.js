@@ -26,10 +26,6 @@ const Row = styled.tr`
   border-bottom: 1px solid #e0e0e0;
 `;
 
-const Head = styled.thead``;
-
-const Body = styled.tbody``;
-
 const Th = styled.th`
   font-size: 0.8rem;
   font-weight: 400;
@@ -103,7 +99,6 @@ export function DataTable({
     key: 'totalCases',
     direction: 'descending',
   });
-  const [sortedData, setSortedData] = useState(null);
   const [filterConfig, setFilterConfig] = useState({ type: 'length', key: '' });
 
   const formatNumber = format(',');
@@ -112,8 +107,8 @@ export function DataTable({
     getCurrentData();
   }, []);
 
-  useMemo(() => {
-    if (!data) return;
+  const sortedData = useMemo(() => {
+    if (!data) return null;
     const sortData = [...data];
     if (sortConfig !== null) {
       sortData.sort((a, b) => {
@@ -126,7 +121,7 @@ export function DataTable({
         return 0;
       });
     }
-    setSortedData(sortData);
+    return sortData;
   }, [data, sortConfig]);
 
   const requestSort = (key) => {
@@ -164,7 +159,7 @@ export function DataTable({
   };
 
   return (
-    <Container>
+    <Container data-testid="container">
       <ErrorModal visible={error} onClose={clearError}>
         Something went wrong retrieving cases and deaths by state. Please try
         again later.
@@ -176,8 +171,8 @@ export function DataTable({
             value={searchQuery}
             placeholder="Search"
           />
-          <Table>
-            <Head>
+          <Table data-testid="table">
+            <thead>
               <Row>
                 <Th>&nbsp;</Th>
                 <Th
@@ -236,8 +231,8 @@ export function DataTable({
                   Administered
                 </Th>
               </Row>
-            </Head>
-            <Body>
+            </thead>
+            <tbody>
               {filterTable().map((state) => (
                 <Row key={state.hash}>
                   <StateCell>
@@ -267,7 +262,7 @@ export function DataTable({
                   </Show>
                 </Row>
               )}
-            </Body>
+            </tbody>
           </Table>
         </>
       ) : null}
