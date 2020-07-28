@@ -10,7 +10,6 @@ const Container = styled.div`
   height: 100%;
   z-index: 100;
   background-color: rgba(0, 0, 0, 0.1);
-  display: ${(props) => (props.visible ? null : 'none')};
 `;
 
 const Modal = styled.div`
@@ -42,13 +41,17 @@ const Close = styled.div`
 
 export default function ErrorModal({ visible, children, onClose }) {
   return (
-    <Container visible={visible} onClick={onClose}>
-      <Modal>
-        <Close onClick={onClose}>
-          <GrClose size="1.7rem" />
-        </Close>
-        <Text>{children}</Text>
-      </Modal>
-    </Container>
+    <>
+      {visible && (
+        <Container onClick={onClose}>
+          <Modal>
+            <Close onClick={onClose}>
+              <GrClose size="1.7rem" />
+            </Close>
+            <Text>{children}</Text>
+          </Modal>
+        </Container>
+      )}
+    </>
   );
 }
