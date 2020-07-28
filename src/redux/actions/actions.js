@@ -87,7 +87,7 @@ export const clearDailyDataError = () => ({
   type: types.CLEAR_DAILY_DATA_ERROR,
 });
 
-export const clearResourcesError = () => ({
+export const clearCDCResourcesError = () => ({
   type: types.CLEAR_CDC_RESOURCES_ERROR,
 });
 

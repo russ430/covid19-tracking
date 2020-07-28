@@ -37,4 +37,14 @@ describe('resource reducer', () => {
       ),
     );
   });
+
+  it('handles CLEAR_CDC_RESOURCES_ERROR', () => {
+    const error = 1;
+    expect(
+      reducer({ ...initialState, error }, actions.clearCDCResourcesError()),
+    ).toEqual({
+      ...initialState,
+      error: null,
+    });
+  });
 });

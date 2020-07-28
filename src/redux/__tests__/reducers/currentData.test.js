@@ -3,6 +3,7 @@ import {
   getCurrentStateData,
   getCurrentStateDataSuccess,
   getCurrentStateDataFailure,
+  clearCurrentStateDataError,
 } from '../../actions/actions';
 
 describe('currentData reducer', () => {
@@ -43,6 +44,16 @@ describe('currentData reducer', () => {
       ...initialState,
       isFetching: false,
       error,
+    });
+  });
+
+  it('handles CLEAR_CURRENT_STATE_DATA_ERROR', () => {
+    const error = 1;
+    expect(
+      reducer({ ...initialState, error }, clearCurrentStateDataError()),
+    ).toEqual({
+      ...initialState,
+      error: null,
     });
   });
 });

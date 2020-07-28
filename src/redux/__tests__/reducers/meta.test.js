@@ -32,4 +32,14 @@ describe('state reducer', () => {
       isFetching: false,
     });
   });
+
+  it('handles CLEAR_ALL_STATES_META_ERROR', () => {
+    const error = 1;
+    expect(
+      reducer({ ...initialState, error }, actions.clearAllStatesMetaError()),
+    ).toEqual({
+      ...initialState,
+      error: null,
+    });
+  });
 });

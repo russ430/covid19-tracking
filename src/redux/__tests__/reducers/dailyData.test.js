@@ -44,4 +44,14 @@ describe('data reducer', () => {
       isFetching: false,
     });
   });
+
+  it('handles CLEAR_DAILY_DATA_ERROR', () => {
+    const error = 1;
+    expect(
+      reducer({ ...initialState, error }, actions.clearDailyDataError()),
+    ).toEqual({
+      ...initialState,
+      error: null,
+    });
+  });
 });

@@ -11,7 +11,7 @@ import ResourcePlaceholder from '../PlaceHolders/ResourcePlaceholder';
 import Article from './components/Article';
 import {
   requestCDCResources,
-  clearResourcesError,
+  clearCDCResourcesError,
 } from '../../redux/actions/actions';
 
 const Container = styled.div`
@@ -84,7 +84,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getResources: () => dispatch(requestCDCResources()),
-  clearError: () => dispatch(clearResourcesError()),
+  clearError: () => dispatch(clearCDCResourcesError()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResourceSidebar);
