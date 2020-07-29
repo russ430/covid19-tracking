@@ -33,11 +33,11 @@ const Line = styled.div`
 `;
 
 export function ResourceSidebar({
-  getResources,
-  resources,
-  error,
   clearError,
+  error,
+  getResources,
   isFetching,
+  resources,
 }) {
   useEffect(() => {
     getResources();
@@ -69,11 +69,11 @@ ResourceSidebar.defaultProps = {
 };
 
 ResourceSidebar.propTypes = {
-  resources: PropTypes.arrayOf(PropTypes.object),
-  getResources: PropTypes.func.isRequired,
-  error: PropTypes.object,
   clearError: PropTypes.func.isRequired,
+  error: PropTypes.object,
+  getResources: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
+  resources: PropTypes.arrayOf(PropTypes.object),
 };
 
 const mapStateToProps = (state) => ({

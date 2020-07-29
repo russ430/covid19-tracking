@@ -44,19 +44,19 @@ const State = styled.h3`
 `;
 
 export function StatesSidebar({
-  meta,
+  clearError,
+  error,
   getMeta,
+  isFetching,
+  meta,
   selected,
   setSelected,
-  error,
-  clearError,
-  isFetching,
 }) {
   useEffect(() => {
     getMeta();
   }, []);
 
-  const handleOnClick = (state) => {
+  const handleOnClickState = (state) => {
     setSelected(state);
   };
 
@@ -72,7 +72,7 @@ export function StatesSidebar({
           <>
             <State
               selected={selected === 'all'}
-              onClick={() => handleOnClick('all')}
+              onClick={() => handleOnClickState('all')}
             >
               US Totals
             </State>
@@ -82,7 +82,7 @@ export function StatesSidebar({
                 <State
                   selected={selected === state}
                   key={meta[state].id}
-                  onClick={() => handleOnClick(meta[state].state)}
+                  onClick={() => handleOnClickState(meta[state].state)}
                 >
                   {meta[state].name}
                 </State>
@@ -105,11 +105,13 @@ StatesSidebar.defaultProps = {
 };
 
 StatesSidebar.propTypes = {
+  clearError: PropTypes.func.isRequired,
+  error: PropTypes.object,
+  isFetching: PropTypes.bool.isRequired,
+  getMeta: PropTypes.func.isRequired,
   meta: PropTypes.object,
   selected: PropTypes.string.isRequired,
-  getMeta: PropTypes.func.isRequired,
   setSelected: PropTypes.func.isRequired,
-  error: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({

@@ -38,17 +38,17 @@ const GRAPHHEIGHT = 300;
 const GRAPHWIDTH = 600;
 
 export function NewCasesGraph({
-  selectedState,
-  fetchData,
+  barsKey,
+  clearError,
   data,
   dataName,
-  storeDataFromCache,
-  lastUpdated,
-  barsKey,
-  lineKey,
   error,
-  clearError,
+  fetchData,
+  lastUpdated,
+  lineKey,
   meta,
+  selectedState,
+  storeDataFromCache,
 }) {
   const formatNumber = d3.format(',');
   const margin = { top: 20, right: 0, bottom: 30, left: 20 };
@@ -293,28 +293,33 @@ export function NewCasesGraph({
 NewCasesGraph.defaultProps = {
   data: [{}],
   error: null,
+  meta: {},
+  lastUpdated: null,
 };
 
 NewCasesGraph.propTypes = {
   barsKey: PropTypes.string.isRequired,
+  clearError: PropTypes.func.isRequired,
   data: PropTypes.arrayOf(PropTypes.object),
   dataName: PropTypes.string.isRequired,
+  error: PropTypes.object,
   fetchData: PropTypes.func.isRequired,
+  lastUpdated: PropTypes.string,
   lineKey: PropTypes.string.isRequired,
+  meta: PropTypes.object,
   selectedState: PropTypes.string.isRequired,
   storeDataFromCache: PropTypes.func.isRequired,
-  error: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({
   barsKey: state.graph.barsKey,
   data: state.dailyData.data,
   dataName: state.graph.name,
+  error: state.dailyData.error,
   lastUpdated: state.dailyData.lastUpdated,
   lineKey: state.graph.lineKey,
-  selectedState: state.selected.selected,
-  error: state.dailyData.error,
   meta: state.meta.meta,
+  selectedState: state.selected.selected,
 });
 
 const mapDispatchToProps = (dispatch) => ({

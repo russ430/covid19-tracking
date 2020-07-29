@@ -87,12 +87,12 @@ const Input = styled.input`
 `;
 
 export function DataTable({
+  clearError,
   data,
+  error,
   getCurrentData,
   meta,
   setSelectedState,
-  error,
-  clearError,
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortConfig, setSortConfig] = useState({
@@ -277,16 +277,18 @@ DataTable.defaultProps = {
 };
 
 DataTable.propTypes = {
+  clearError: PropTypes.func.isRequired,
   data: PropTypes.array,
-  meta: PropTypes.object,
-  getCurrentData: PropTypes.func.isRequired,
   error: PropTypes.object,
+  getCurrentData: PropTypes.func.isRequired,
+  meta: PropTypes.object,
+  setSelectedState: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   data: state.currentData.data,
-  meta: state.meta.meta,
   error: state.currentData.error,
+  meta: state.meta.meta,
 });
 
 const mapDispatchToProps = (dispatch) => ({

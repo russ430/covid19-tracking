@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { GrClose } from 'react-icons/gr';
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
   position: fixed;
@@ -55,3 +56,12 @@ export default function ErrorModal({ visible, children, onClose }) {
     </>
   );
 }
+
+ErrorModal.defaultProps = {
+  visible: null,
+};
+
+ErrorModal.propTypes = {
+  visible: PropTypes.any,
+  onClose: PropTypes.func.isRequired,
+};

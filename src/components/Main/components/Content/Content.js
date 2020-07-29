@@ -114,17 +114,19 @@ Content.defaultProps = {
 };
 
 Content.propTypes = {
-  selectedState: PropTypes.string.isRequired,
-  meta: PropTypes.object,
-  isFetching: PropTypes.bool.isRequired,
   graphSelected: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  meta: PropTypes.object,
+  selectedState: PropTypes.string.isRequired,
+  setGraphToNewCases: PropTypes.func.isRequired,
+  setGraphToNewDeaths: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  selectedState: state.selected.selected,
-  meta: state.meta.meta,
-  isFetching: state.dailyData.isFetching,
   graphSelected: state.graph.name,
+  isFetching: state.dailyData.isFetching,
+  meta: state.meta.meta,
+  selectedState: state.selected.selected,
 });
 
 const mapDispatchToProps = (dispatch) => ({
