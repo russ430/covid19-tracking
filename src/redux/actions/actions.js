@@ -141,7 +141,6 @@ export const requestStateDailyData = (state) => {
         dispatch(getDailyDataSuccess(parsed));
       })
       .catch((error) => {
-        console.log(error);
         dispatch(getDailyDataFailure(error));
       });
   };
