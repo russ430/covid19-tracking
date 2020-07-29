@@ -63,7 +63,13 @@ describe('async actions', () => {
 
   it('creates GET_ALL_STATES_META_SUCCESS when fetching data has succeeded', () => {
     const data = [
-      { state: 'MA', name: 'Massachusetts', fips: '01', twitter: '@mass' },
+      {
+        state: 'MA',
+        name: 'Massachusetts',
+        fips: '01',
+        twitter: '@mass',
+        covid19Site: 'https://www.covid.com',
+      },
     ];
     mock.onGet(url.ALL_STATES_META).reply(200, data);
 
@@ -73,6 +79,7 @@ describe('async actions', () => {
         name: 'Massachusetts',
         id: '01',
         twitterHandle: '@mass',
+        covidSite: 'https://www.covid.com',
       },
     };
 
@@ -124,7 +131,7 @@ describe('async actions', () => {
         totalCases: 1,
         date: new Date('01-01-2020'),
         lastUpdated: date,
-        state: 'ma',
+        state: 'MA',
       },
     ];
 

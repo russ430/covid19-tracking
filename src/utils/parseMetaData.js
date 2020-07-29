@@ -8,6 +8,7 @@ export default function parseMetaData(data) {
         name: state.name,
         id: state.fips,
         twitterHandle: state.twitter,
+        covidSite: state.covid19Site,
       };
     }
   });
