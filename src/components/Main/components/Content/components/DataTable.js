@@ -78,7 +78,6 @@ const Show = styled(Td)`
   background-color: #f9f9f9;
   text-align: center;
   padding: 1rem 0;
-  cursor: pointer;
 `;
 
 const Input = styled.input`
@@ -249,17 +248,18 @@ export function DataTable({
               ))}
               {filterConfig.type !== 'search' && (
                 <Row>
-                  <Show
-                    onClick={() =>
-                      setFilterConfig((prev) =>
-                        prev.type === 'length'
-                          ? { type: '', key: '' }
-                          : { type: 'length', key: '' },
-                      )
-                    }
-                    colSpan="5"
-                  >
-                    Show {filterConfig.type === 'length' ? 'all' : 'less'}
+                  <Show colSpan="5">
+                    <StateText
+                      onClick={() =>
+                        setFilterConfig((prev) =>
+                          prev.type === 'length'
+                            ? { type: '', key: '' }
+                            : { type: 'length', key: '' },
+                        )
+                      }
+                    >
+                      Show {filterConfig.type === 'length' ? 'all' : 'less'}
+                    </StateText>
                   </Show>
                 </Row>
               )}
@@ -276,6 +276,8 @@ export function DataTable({
             totals include residents tested from neighboring states which could
             also have an impact on numbers in this table. Death counts may also
             include both confirmed and presumed or probable COVID deaths.
+            Negative daily case increase values denote a correction of previous
+            case counts from past dates.
           </AboutData>
         </>
       ) : null}
