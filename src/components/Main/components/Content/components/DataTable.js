@@ -5,6 +5,7 @@ import { format } from 'd3';
 import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
 import PropTypes from 'prop-types';
 
+import AboutData from './AboutData';
 import ErrorModal from '../../../../ErrorModal/ErrorModal';
 import {
   requestCurrentStateData,
@@ -264,6 +265,18 @@ export function DataTable({
               )}
             </tbody>
           </Table>
+
+          <AboutData>
+            Some states are reporting total tests as the number of people tested
+            while others report the number of specimens tested because some
+            people may be tested more than once. Additionally, some states are
+            separating the numbers of people tested with PCR and antibody tests;
+            in this case the numbers in this table only include PCR tests which
+            could have an impact on total testing numbers. Some states&apos;
+            totals include residents tested from neighboring states which could
+            also have an impact on numbers in this table. Death counts may also
+            include both confirmed and presumed or probable COVID deaths.
+          </AboutData>
         </>
       ) : null}
     </Container>

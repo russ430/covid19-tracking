@@ -7,6 +7,8 @@ import {
   setGraphDataToNewCases,
   setGraphDataToNewDeaths,
 } from '../../../../redux/actions/actions';
+
+import AboutData from './components/AboutData';
 import DataTable from './components/DataTable';
 import Loader from '../../../Loader/Loader';
 import NewCasesGraph from './components/NewCasesGraph';
@@ -66,11 +68,16 @@ export function Content({
   setGraphToNewCases,
   setGraphToNewDeaths,
 }) {
+  const selectedStateName =
+    selectedState === 'all' ? 'United States' : meta[selectedState].name;
+
+  const covidSite =
+    selectedState === 'all'
+      ? 'https://www.state.gov/coronavirus/'
+      : meta[selectedState].covidSite;
   return (
     <Container>
-      <Title>
-        {selectedState === 'all' ? 'United States' : meta[selectedState].name}
-      </Title>
+      <Title>{selectedStateName}</Title>
       <Load>{isFetching && <Loader />}</Load>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div style={{ marginBottom: '2rem' }}>
@@ -91,6 +98,28 @@ export function Content({
               Deaths
             </Button>
           </Buttons>
+          <AboutData>
+            On certain days some states&apos; data has included a backlog of
+            data which had not been reported for several days. This can result
+            in higher than reported cases or deaths on those days and should be
+            taken into account accordingly. Some states also did not update
+            numbers of case or death counts on various days resulting in reports
+            of 0 numbers for data respectively. Additionally, case counts for
+            certain states included people who tested positive for COVID-19 AND
+            people who have symptoms of COVID-19 and are a close contact to
+            someone who tested positive. Days where cases or deaths are negative
+            denote the state correcting previous incorrect counts of the
+            respective datum. Some states are also releasing probable cases and
+            deaths which would cause total cases and total deaths to spike in
+            this dataset. Death counts may also include both confirmed and
+            presumed or probable COVID deaths. For more information specific to{' '}
+            {selectedStateName}-related coronavirus information please visit
+            their website dedicated to COVID-19{' '}
+            <a href={`${covidSite}`} rel="noreferrer noopener" target="_blank">
+              here
+            </a>
+            .
+          </AboutData>
         </div>
         <NumericalData />
       </div>

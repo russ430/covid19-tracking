@@ -41,6 +41,10 @@ const State = styled.h3`
   margin: 0.5rem 0;
   cursor: pointer;
   align-self: flex-start;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export function StatesSidebar({
