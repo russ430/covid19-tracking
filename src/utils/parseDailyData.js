@@ -37,7 +37,7 @@ export default function parseData(data) {
       totalCases: singleDay.positive,
       date: parseDate(singleDay.date),
       lastUpdated: singleDay.lastModified || singleDay.lastUpdateEt,
-      state: singleDay.state.toLowerCase(),
+      state: singleDay.state,
     };
     return day;
   });
