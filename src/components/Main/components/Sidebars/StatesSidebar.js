@@ -86,7 +86,7 @@ export function StatesSidebar({
                 <State
                   selected={selected === state}
                   key={meta[state].id}
-                  onClick={() => handleOnClickState(meta[state].state)}
+                  onClick={() => handleOnClickState(state)}
                 >
                   {meta[state].name}
                 </State>

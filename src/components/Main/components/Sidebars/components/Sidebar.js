@@ -29,5 +29,5 @@ const Container = styled.div`
 `;
 
 export default function Sidebar({ children }) {
-  return <Container>{children}</Container>;
+  return <Container data-testid="sidebar-container">{children}</Container>;
 }

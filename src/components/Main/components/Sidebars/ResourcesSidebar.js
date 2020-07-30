@@ -32,7 +32,7 @@ const Line = styled.div`
   margin: 0.5rem 0;
 `;
 
-export function ResourceSidebar({
+export function ResourcesSidebar({
   clearError,
   error,
   getResources,
@@ -63,12 +63,12 @@ export function ResourceSidebar({
   );
 }
 
-ResourceSidebar.defaultProps = {
+ResourcesSidebar.defaultProps = {
   resources: [],
   error: null,
 };
 
-ResourceSidebar.propTypes = {
+ResourcesSidebar.propTypes = {
   clearError: PropTypes.func.isRequired,
   error: PropTypes.object,
   getResources: PropTypes.func.isRequired,
@@ -87,4 +87,4 @@ const mapDispatchToProps = (dispatch) => ({
   clearError: () => dispatch(clearCDCResourcesError()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResourceSidebar);
+export default connect(mapStateToProps, mapDispatchToProps)(ResourcesSidebar);
