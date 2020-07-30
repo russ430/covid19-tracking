@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { range as d3range } from 'd3';
 
-import ErrorModal from '../../../ErrorModal/ErrorModal';
+import ErrorModal from '../../../ErrorModal';
 import Sidebar from './components/Sidebar';
 import ResourcePlaceholder from './components/ResourcePlaceholder';
 import Article from './components/Article';

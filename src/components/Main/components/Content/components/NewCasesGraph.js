@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import ErrorModal from '../../../../ErrorModal/ErrorModal';
+import ErrorModal from '../../../../ErrorModal';
 import bisect from '../../../../../utils/bisect';
 import {
   requestStateDailyData,

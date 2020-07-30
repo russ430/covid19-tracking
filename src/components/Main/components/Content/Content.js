@@ -10,7 +10,7 @@ import {
 
 import AboutData from './components/AboutData';
 import DataTable from './components/DataTable';
-import Loader from '../../../Loader/Loader';
+import Loader from '../../../Loader';
 import NewCasesGraph from './components/NewCasesGraph';
 import NumericalData from './components/NumericalData';
 

@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import { Provider } from 'react-redux';
 
 import configureStore from './redux/store/configureStore';
-import Header from './components/Header/Header';
+
+import Footer from './components/Footer';
+import Header from './components/Header';
 import Main from './components/Main/Main';
 
 const Container = styled.div`
@@ -22,6 +24,7 @@ function App() {
       <Container>
         <Header />
         <Main />
+        <Footer />
       </Container>
     </Provider>
   );

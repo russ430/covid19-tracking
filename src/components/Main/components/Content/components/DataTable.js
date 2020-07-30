@@ -6,7 +6,7 @@ import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
 import PropTypes from 'prop-types';
 
 import AboutData from './AboutData';
-import ErrorModal from '../../../../ErrorModal/ErrorModal';
+import ErrorModal from '../../../../ErrorModal';
 import {
   requestCurrentStateData,
   selectState,
