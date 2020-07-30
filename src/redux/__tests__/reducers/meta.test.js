@@ -1,5 +1,9 @@
 import reducer, { initialState } from '../../reducers/meta';
-import * as actions from '../../actions/actions';
+import {
+  clearAllStatesMetaError,
+  getAllStatesMetaFailure,
+  getAllStatesMetaSuccess,
+} from '../../actions';
 
 describe('state reducer', () => {
   it('given undefined returns initial state', () => {
@@ -10,7 +14,7 @@ describe('state reducer', () => {
     expect(
       reducer(
         { ...initialState, isFetching: true },
-        actions.getAllStatesMetaSuccess(meta),
+        getAllStatesMetaSuccess(meta),
       ),
     ).toEqual({
       ...initialState,
@@ -24,7 +28,7 @@ describe('state reducer', () => {
     expect(
       reducer(
         { ...initialState, isFetching: true },
-        actions.getAllStatesMetaFailure(error),
+        getAllStatesMetaFailure(error),
       ),
     ).toEqual({
       ...initialState,
@@ -36,7 +40,7 @@ describe('state reducer', () => {
   it('handles CLEAR_ALL_STATES_META_ERROR', () => {
     const error = 1;
     expect(
-      reducer({ ...initialState, error }, actions.clearAllStatesMetaError()),
+      reducer({ ...initialState, error }, clearAllStatesMetaError()),
     ).toEqual({
       ...initialState,
       error: null,

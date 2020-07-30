@@ -1,5 +1,10 @@
 import reducer, { initialState } from '../../reducers/resources';
-import * as actions from '../../actions/actions';
+import {
+  clearCDCResourcesError,
+  getCDCResources,
+  getCDCResourcesFailure,
+  getCDCResourcesSuccess,
+} from '../../actions';
 
 describe('resource reducer', () => {
   it('given undefined returns initial state', () => {
@@ -7,7 +12,7 @@ describe('resource reducer', () => {
   });
 
   it('handles GET_RESOURCES', () => {
-    expect(reducer(initialState, actions.getCDCResources())).toEqual({
+    expect(reducer(initialState, getCDCResources())).toEqual({
       ...initialState,
       isFetching: true,
       error: null,
@@ -19,7 +24,7 @@ describe('resource reducer', () => {
     expect(
       reducer(
         { ...initialState, isFetching: true },
-        actions.getCDCResourcesSuccess(resources),
+        getCDCResourcesSuccess(resources),
       ),
     ).toEqual({
       ...initialState,
@@ -33,7 +38,7 @@ describe('resource reducer', () => {
     expect(
       reducer(
         { ...initialState, isFetching: true },
-        actions.getCDCResourcesFailure(error),
+        getCDCResourcesFailure(error),
       ),
     );
   });
@@ -41,7 +46,7 @@ describe('resource reducer', () => {
   it('handles CLEAR_CDC_RESOURCES_ERROR', () => {
     const error = 1;
     expect(
-      reducer({ ...initialState, error }, actions.clearCDCResourcesError()),
+      reducer({ ...initialState, error }, clearCDCResourcesError()),
     ).toEqual({
       ...initialState,
       error: null,

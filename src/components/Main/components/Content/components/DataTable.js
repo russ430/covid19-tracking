@@ -11,7 +11,7 @@ import {
   requestCurrentStateData,
   selectState,
   clearCurrentStateDataError,
-} from '../../../../../redux/actions/actions';
+} from '../../../../../redux/actions';
 
 const Container = styled.div`
   margin: 0 auto;

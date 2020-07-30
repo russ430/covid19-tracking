@@ -12,7 +12,7 @@ import {
   requestAllStatesMeta,
   selectState,
   clearAllStatesMetaError,
-} from '../../../../redux/actions/actions';
+} from '../../../../redux/actions';
 import StatesPlaceholder from './components/StatePlaceholder';
 
 const Container = styled.div`

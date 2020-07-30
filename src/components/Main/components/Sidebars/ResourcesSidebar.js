@@ -12,7 +12,7 @@ import Article from './components/Article';
 import {
   requestCDCResources,
   clearCDCResourcesError,
-} from '../../../../redux/actions/actions';
+} from '../../../../redux/actions';
 
 const Container = styled.div`
   margin-top: 1rem;

@@ -4,7 +4,7 @@ import {
   getCurrentStateDataSuccess,
   getCurrentStateDataFailure,
   clearCurrentStateDataError,
-} from '../../actions/actions';
+} from '../../actions';
 
 describe('currentData reducer', () => {
   it('given undefined returns initial state', () => {

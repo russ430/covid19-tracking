@@ -1,6 +1,6 @@
 import reducer, { initialState } from '../../reducers/dailyData';
 
-import * as actions from '../../actions/actions';
+import * as actions from '../../actions';
 
 describe('data reducer', () => {
   it('given undefined returns initial state', () => {

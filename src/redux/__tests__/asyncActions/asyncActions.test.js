@@ -4,7 +4,20 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 import * as url from '../../api/constants';
-import * as actions from '../../actions/actions';
+import {
+  getAllStatesMeta,
+  getAllStatesMetaFailure,
+  getAllStatesMetaSuccess,
+  getDailyData,
+  getDailyDataSuccess,
+  getDailyDataFailure,
+  getCurrentStateData,
+  getCurrentStateDataFailure,
+  getCurrentStateDataSuccess,
+  requestAllStatesMeta,
+  requestCurrentStateData,
+  requestStateDailyData,
+} from '../../actions';
 
 const mock = new MockAdapter(axios);
 const middlewares = [thunk];
@@ -40,10 +53,10 @@ describe('async actions', () => {
     ];
 
     const expectedActions = [
-      actions.getCurrentStateData(),
-      actions.getCurrentStateDataSuccess(parsed),
+      getCurrentStateData(),
+      getCurrentStateDataSuccess(parsed),
     ];
-    return store.dispatch(actions.requestCurrentStateData()).then(() => {
+    return store.dispatch(requestCurrentStateData()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -53,10 +66,10 @@ describe('async actions', () => {
     mock.onGet(url.ALL_STATES_CURRENT_DATA).reply(401, error);
 
     const expectedActions = [
-      actions.getCurrentStateData(),
-      actions.getCurrentStateDataFailure(error),
+      getCurrentStateData(),
+      getCurrentStateDataFailure(error),
     ];
-    return store.dispatch(actions.requestCurrentStateData()).then(() => {
+    return store.dispatch(requestCurrentStateData()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -84,10 +97,10 @@ describe('async actions', () => {
     };
 
     const expectedActions = [
-      actions.getAllStatesMeta(),
-      actions.getAllStatesMetaSuccess(parsed),
+      getAllStatesMeta(),
+      getAllStatesMetaSuccess(parsed),
     ];
-    return store.dispatch(actions.requestAllStatesMeta()).then(() => {
+    return store.dispatch(requestAllStatesMeta()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -97,10 +110,10 @@ describe('async actions', () => {
     mock.onGet(url.ALL_STATES_META).reply(401, error);
 
     const expectedActions = [
-      actions.getAllStatesMeta(),
-      actions.getAllStatesMetaFailure(error),
+      getAllStatesMeta(),
+      getAllStatesMetaFailure(error),
     ];
-    return store.dispatch(actions.requestAllStatesMeta()).then(() => {
+    return store.dispatch(requestAllStatesMeta()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -135,12 +148,9 @@ describe('async actions', () => {
       },
     ];
 
-    const expectedActions = [
-      actions.getDailyData(),
-      actions.getDailyDataSuccess(parsed),
-    ];
+    const expectedActions = [getDailyData(), getDailyDataSuccess(parsed)];
 
-    return store.dispatch(actions.requestStateDailyData(state)).then(() => {
+    return store.dispatch(requestStateDailyData(state)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -150,12 +160,9 @@ describe('async actions', () => {
     const state = 'ma';
     mock.onGet(url.STATE_DAILY_DATA(state)).reply(401, error);
 
-    const expectedActions = [
-      actions.getDailyData(),
-      actions.getDailyDataFailure(error),
-    ];
+    const expectedActions = [getDailyData(), getDailyDataFailure(error)];
 
-    return store.dispatch(actions.requestStateDailyData(state)).then(() => {
+    return store.dispatch(requestStateDailyData(state)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });

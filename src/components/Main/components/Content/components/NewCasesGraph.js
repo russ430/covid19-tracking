@@ -12,7 +12,7 @@ import {
   requestStateDailyData,
   getDailyDataSuccess,
   clearDailyDataError,
-} from '../../../../../redux/actions/actions';
+} from '../../../../../redux/actions';
 
 const Title = styled.h2`
   font-family: 'Open Sans', sans-serif;

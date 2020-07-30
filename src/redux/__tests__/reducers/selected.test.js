@@ -1,5 +1,5 @@
 import reducer, { initialState } from '../../reducers/selected';
-import { selectState } from '../../actions/actions';
+import { selectState } from '../../actions';
 
 describe('selected reducer', () => {
   it('given undefined returns initial state', () => {

@@ -1,8 +1,5 @@
 import reducer, { initialState } from '../../reducers/graph';
-import {
-  setGraphDataToNewCases,
-  setGraphDataToNewDeaths,
-} from '../../actions/actions';
+import { setGraphDataToNewCases, setGraphDataToNewDeaths } from '../../actions';
 
 describe('graph data reducer', () => {
   it('given undefined returns initial state', () => {

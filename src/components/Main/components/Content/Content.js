@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {
   setGraphDataToNewCases,
   setGraphDataToNewDeaths,
-} from '../../../../redux/actions/actions';
+} from '../../../../redux/actions';
 
 import AboutData from './components/AboutData';
 import DataTable from './components/DataTable';
