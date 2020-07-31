@@ -50,7 +50,6 @@ const ChevronDown = styled(BsChevronDown)`
   @media screen and (max-width: 950px) {
     display: inline-block;
     margin: 0 1rem;
-    padding-top: 0.5rem;
   }
 `;
 
