@@ -1,11 +1,12 @@
 /* eslint-disable no-shadow */
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import * as d3 from 'd3';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+import useResizeObserver from '../../../../../utils/useResizeObserver';
 import ErrorModal from '../../../../ErrorModal';
 import bisect from '../../../../../utils/bisect';
 import {
@@ -14,6 +15,27 @@ import {
   clearDailyDataError,
 } from '../../../../../redux/actions';
 
+const SvgContainer = styled.div`
+  width: 600px;
+  height: 300px;
+
+  @media screen and (max-width: 650px) {
+    width: 400px;
+    height: 250px;
+    margin: 0 auto;
+  }
+
+  @media screen and (max-width: 550px) {
+    width: 300px;
+    height: 200px;
+  }
+`;
+
+const Svg = styled.svg`
+  width: 100%;
+  height: 100%;
+`;
+
 const Title = styled.h2`
   font-family: 'Open Sans', sans-serif;
   font-size: 1.2rem;
@@ -21,6 +43,10 @@ const Title = styled.h2`
   text-align: center;
   margin: 0;
   padding: 0;
+
+  @media screen and (max-width: 650px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const Updated = styled.h3`
@@ -32,6 +58,10 @@ const Updated = styled.h3`
   margin: 0;
   margin-bottom: -0.5rem;
   font-style: italic;
+
+  @media screen and (max-width: 650px) {
+    font-size: 0.7rem;
+  }
 `;
 
 const GRAPHHEIGHT = 300;
@@ -50,10 +80,12 @@ export function NewCasesGraph({
   selectedState,
   storeDataFromCache,
 }) {
+  const svgContainerRef = useRef();
+  const dimensions = useResizeObserver(svgContainerRef);
   const formatNumber = d3.format(',');
   const margin = { top: 20, right: 0, bottom: 30, left: 20 };
-  const width = GRAPHWIDTH - margin.right - margin.left;
-  const height = GRAPHHEIGHT - margin.top - margin.bottom;
+  const width = dimensions.width - margin.right - margin.left;
+  const height = dimensions.height - margin.top - margin.bottom;
 
   const drawGraph = () => {
     const svg = d3.select('.svg-graph');
@@ -210,12 +242,12 @@ export function NewCasesGraph({
       .style('font-size', '0.8rem')
       .style('padding', '5px')
       .style('background', '#fff')
-      .style('border', '1px solid #ddd')
-      .text('a simple tooltip');
+      .style('border', '1px solid #ddd');
 
     // show tooltip when mouse hovers over svg
     svg
       .on('touchmove mousemove', () => {
+        // don't show tooltip when outside graph
         if (
           d3.event.offsetX < margin.left ||
           d3.event.offsetX > width - margin.right ||
@@ -272,20 +304,22 @@ export function NewCasesGraph({
       drawGraph();
     }
     return () => clearSVG();
-  }, [data, barsKey]);
+  }, [data, dimensions, barsKey]);
 
   return (
     <div>
       <ErrorModal visible={error} onClose={clearError}>
         Unable to retrieve data for{' '}
         {selectedState === 'all' ? 'the U.S' : meta[selectedState].name}. Please
-        try again later
+        try again later.
       </ErrorModal>
       <Title>New reported {dataName.toLowerCase()} by day</Title>
       <Updated>
         *Last updated {format(new Date(lastUpdated), 'PPP @ p')}
       </Updated>
-      <svg width={GRAPHWIDTH} height={GRAPHHEIGHT} className="svg-graph" />
+      <SvgContainer ref={svgContainerRef}>
+        <Svg className="svg-graph" />
+      </SvgContainer>
     </div>
   );
 }
