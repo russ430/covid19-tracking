@@ -26,6 +26,11 @@ const Container = styled.div`
   &::-webkit-scrollbar-thumb:active {
     background: rgba(0, 0, 0, 0.9);
   }
+
+  @media screen and (max-width: 950px) {
+    height: 300px;
+    padding: 0;
+  }
 `;
 
 export default function Sidebar({ children }) {

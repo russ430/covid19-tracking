@@ -14,6 +14,10 @@ const Container = styled.div`
   max-width: 1300px;
   margin: 0 auto;
   padding: 1rem 2rem;
+
+  @media screen and (max-width: 900px) {
+    padding: 1rem 0;
+  }
 `;
 
 const store = configureStore();

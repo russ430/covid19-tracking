@@ -5,9 +5,30 @@ import PropTypes from 'prop-types';
 import { format } from 'd3';
 
 const Container = styled.div`
+  margin: 0 0 1rem 0;
+
+  @media screen and (max-width: 1150px) {
+    margin-bottom: 3rem;
+  }
+`;
+
+const DataContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 5rem 1.5rem 0 1.5rem;
+  margin: 5rem 0 0.5rem 0;
+
+  @media screen and (max-width: 1150px) {
+    flex-direction: row;
+    margin: 1rem 0;
+  }
+`;
+
+const DataGroup = styled.div`
+  margin: 0;
+
+  @media screen and (max-width: 1150px) {
+    margin: 0 1.5rem;
+  }
 `;
 
 const Label = styled.h2`
@@ -20,6 +41,18 @@ const Label = styled.h2`
   &:not(:first-child) {
     margin-top: 1rem;
   }
+
+  @media screen and (max-width: 1150px) {
+    font-size: 1.5rem;
+  }
+
+  @media screen and (max-width: 650px) {
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 0.85rem;
+  }
 `;
 
 const Data = styled.h2`
@@ -28,6 +61,14 @@ const Data = styled.h2`
   font-weight: 700;
   margin: 0;
   padding: 0;
+
+  @media screen and (max-width: 1150px) {
+    font-size: 2.5rem;
+  }
+
+  @media screen and (max-width: 650px) {
+    font-size: 1.8rem;
+  }
 `;
 
 const Note = styled.h3`
@@ -39,6 +80,19 @@ const Note = styled.h3`
   font-style: italic;
   margin: 0.5rem 0;
   padding: 0;
+
+  @media screen and (max-width: 1150px) {
+    width: 100%;
+    text-align: center;
+  }
+
+  @media screen and (max-width: 650px) {
+    font-size: 0.75rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 0.6rem;
+  }
 `;
 
 export function NumericalData({ data }) {
@@ -55,11 +109,19 @@ export function NumericalData({ data }) {
 
   return (
     <Container>
-      <Label>TOTAL CASES:</Label>
-      <Data data-testid="cases">{cases}</Data>
-      <Label>TOTAL DEATHS:</Label>
-      <Data data-testid="deaths">{deaths}</Data>
-      <Note>*Includes confirmed and probable deaths where available</Note>
+      <DataContainer>
+        <DataGroup>
+          <Label>TOTAL CASES:</Label>
+          <Data data-testid="cases">{cases}</Data>
+        </DataGroup>
+        <DataGroup>
+          <Label>TOTAL DEATHS:</Label>
+          <Data data-testid="deaths">{deaths}</Data>
+        </DataGroup>
+      </DataContainer>
+      <Note>
+        *Includes confirmed and probable cases and deaths where available
+      </Note>
     </Container>
   );
 }

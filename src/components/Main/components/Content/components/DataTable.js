@@ -16,6 +16,10 @@ import {
 const Container = styled.div`
   margin: 0 auto;
   width: 80%;
+
+  @media screen and (max-width: 900px) {
+    width: 100%;
+  }
 `;
 
 const Table = styled.table`
@@ -47,6 +51,10 @@ const Th = styled.th`
       text-decoration: underline;
     }
   }
+
+  @media screen and (max-width: 575px) {
+    font-size: 0.6rem;
+  }
 `;
 
 const Td = styled.td`
@@ -57,6 +65,14 @@ const Td = styled.td`
   text-transform: none;
   padding: 0.5rem 1rem;
   width: 18.75%;
+
+  @media screen and (max-width: 575px) {
+    font-size: 0.8rem;
+  }
+
+  @media screen and (max-width: 450px) {
+    font-size: 0.6rem;
+  }
 `;
 
 const StateCell = styled(Td)`
@@ -84,6 +100,7 @@ const Input = styled.input`
   padding: 0.5rem;
   border: 1px solid #aaa;
   border-radius: 5px;
+  margin-bottom: 1rem;
 `;
 
 export function DataTable({

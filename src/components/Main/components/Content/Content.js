@@ -1,23 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { BsChevronDown } from 'react-icons/bs';
 
 import {
   setGraphDataToNewCases,
   setGraphDataToNewDeaths,
 } from '../../../../redux/actions';
 
+import StatesDropdown from './components/StatesDropdown';
 import AboutData from './components/AboutData';
 import DataTable from './components/DataTable';
 import Loader from '../../../Loader';
-import NewCasesGraph from './components/NewCasesGraph';
+import Graph from './components/Graph';
 import NumericalData from './components/NumericalData';
 
 const Container = styled.section`
   padding: 0 0.5rem;
   margin: 0 auto;
   flex: 4.5;
+
+  @media screen and (max-width: 950px) {
+    flex: 1;
+    margin: 0 1rem;
+  }
+`;
+
+const Header = styled.div`
+  position: relative;
 `;
 
 const Title = styled.h2`
@@ -27,6 +38,20 @@ const Title = styled.h2`
   margin: 0;
   padding: 0;
   text-align: center;
+
+  @media screen and (max-width: 650px) {
+    font-size: 2rem;
+  }
+`;
+
+const ChevronDown = styled(BsChevronDown)`
+  display: none;
+
+  @media screen and (max-width: 950px) {
+    display: inline-block;
+    margin: 0 1rem;
+    padding-top: 0.5rem;
+  }
 `;
 
 const Load = styled.div`
@@ -34,13 +59,27 @@ const Load = styled.div`
   margin-top: 0.5rem;
 `;
 
-const Header = styled.h3`
+const GraphAndNumbers = styled.div`
+  display: flex;
+  justify-content: center;
+
+  @media screen and (max-width: 1150px) {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+`;
+
+const SecondaryTitle = styled.h3`
   font-size: 1.8rem;
   font-weight: 700;
   font-family: 'Merriweather', serif;
   margin: 2rem 0;
   padding: 0;
   text-align: center;
+
+  @media screen and (max-width: 650px) {
+    font-size: 1.3rem;
+  }
 `;
 
 const Buttons = styled.div`
@@ -58,6 +97,11 @@ const Button = styled.button`
   font-size: 1rem;
   font-family: 'Open Sans', sans-serif;
   cursor: pointer;
+
+  @media screen and (max-width: 600px) {
+    font-size: 0.8rem;
+    padding: 0.3rem 2rem;
+  }
 `;
 
 export function Content({
@@ -68,6 +112,7 @@ export function Content({
   setGraphToNewCases,
   setGraphToNewDeaths,
 }) {
+  const [isStatesDropdownVisible, setIsStatesDropdownVisible] = useState(false);
   const selectedStateName =
     selectedState === 'all' ? 'United States' : meta[selectedState].name;
 
@@ -77,11 +122,24 @@ export function Content({
       : meta[selectedState].covidSite;
   return (
     <Container>
-      <Title>{selectedStateName}</Title>
+      <Header>
+        {isStatesDropdownVisible && (
+          <StatesDropdown setShowDropdown={setIsStatesDropdownVisible} />
+        )}
+        <Title
+          onClick={() => setIsStatesDropdownVisible(!isStatesDropdownVisible)}
+        >
+          {selectedStateName}
+          <ChevronDown
+            size="1.5rem"
+            onClick={() => setIsStatesDropdownVisible(!isStatesDropdownVisible)}
+          />
+        </Title>
+      </Header>
       <Load>{isFetching && <Loader />}</Load>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <GraphAndNumbers>
         <div style={{ marginBottom: '2rem' }}>
-          <NewCasesGraph />
+          <Graph />
           <Buttons>
             <Button
               type="button"
@@ -122,7 +180,7 @@ export function Content({
           </AboutData>
         </div>
         <NumericalData />
-      </div>
+      </GraphAndNumbers>
       <div
         style={{
           margin: '0 auto',
@@ -131,7 +189,7 @@ export function Content({
           maxWidth: '900px',
         }}
       >
-        <Header>Cases and Deaths by State</Header>
+        <SecondaryTitle>Cases and Deaths by State</SecondaryTitle>
         <DataTable />
       </div>
     </Container>

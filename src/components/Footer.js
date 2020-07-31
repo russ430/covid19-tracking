@@ -5,10 +5,11 @@ const Container = styled.div`
   margin: 3rem auto 0 auto;
   text-align: center;
   max-width: 600px;
+  padding: 0 0.5rem;
 `;
 
 const Text = styled.p`
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: #909090;
   font-family: 'Open Sans', sans-serif;
   margin: 0;
