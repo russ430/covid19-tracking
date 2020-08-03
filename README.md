@@ -1,68 +1,31 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# U.S. Coronavirus Tracking
 
-## Available Scripts
+A simple web app created to track the current COVID-19 Coronavirus pandemic in the United States.
 
-In the project directory, you can run:
+You can find the live project [here](https://us-coronavirus-tracking.netlify.app).
 
-### `npm start`
+## About
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+I developed this project because I wanted to create a simple dashboard to view how the U.S. was doing with its fight against the coronavirus pandemic. The dashboard includes an interactive graph that changes depending on the type of data selected and the state or territory selected, a sortable data table which holds current data for every U.S. state and territory, and lastly a sidebar that contains a list of links to coronavirus-related resources posted daily by the CDC.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+In an effort to reduce network requests all data for individual states is cached in session storage in the browser after the initial request.
 
-### `npm test`
+This project was developed using the JavaScript library React, the state management container Redux, and the graph was created with d3.js. Styling was done using styled-components and icons were used from react-icons.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Built With
 
-### `npm run build`
+* [React](https://reactjs.org/)
+* [Redux](https://redux.js.org/)
+* [d3](https://d3js.org/)
+* [styled-components](https://styled-components.com/)
+* [react-icons](https://react-icons.github.io/)
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Author
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+[Alex Russian](https://github.com/russ430)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## License
 
-### `npm run eject`
+The data for this project is obtained from [The Covid Tracking Project](https://covidtracking.com) at The Atlantic and is used and published under a [Creative Commons CC BY-NC-4.0 License](https://creativecommons.org/licenses/by-nc/4.0/).
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+This project is licensed under the MIT License.
