@@ -5,10 +5,6 @@ import { TiArrowSortedDown } from 'react-icons/ti';
 const Container = styled.div`
   margin: 1rem 0;
   width: 550px;
-
-  @media screen and (max-width: 600px) {
-    width: 100%;
-  }
 `;
 
 const Header = styled.h3`

@@ -20,11 +20,6 @@ const Container = styled.section`
   padding: 0 0.5rem;
   margin: 0 auto;
   flex: 4.5;
-
-  @media screen and (max-width: 950px) {
-    flex: 1;
-    margin: 0 1rem;
-  }
 `;
 
 const Header = styled.div`
@@ -38,19 +33,10 @@ const Title = styled.h2`
   margin: 0;
   padding: 0;
   text-align: center;
-
-  @media screen and (max-width: 650px) {
-    font-size: 2rem;
-  }
 `;
 
 const ChevronDown = styled(BsChevronDown)`
   display: none;
-
-  @media screen and (max-width: 950px) {
-    display: inline-block;
-    margin: 0 1rem;
-  }
 `;
 
 const Load = styled.div`
@@ -61,11 +47,6 @@ const Load = styled.div`
 const GraphAndNumbers = styled.div`
   display: flex;
   justify-content: center;
-
-  @media screen and (max-width: 1150px) {
-    flex-direction: column-reverse;
-    align-items: center;
-  }
 `;
 
 const SecondaryTitle = styled.h3`
@@ -75,10 +56,6 @@ const SecondaryTitle = styled.h3`
   margin: 2rem 0;
   padding: 0;
   text-align: center;
-
-  @media screen and (max-width: 650px) {
-    font-size: 1.3rem;
-  }
 `;
 
 const Buttons = styled.div`
@@ -96,11 +73,6 @@ const Button = styled.button`
   font-size: 1rem;
   font-family: 'Open Sans', sans-serif;
   cursor: pointer;
-
-  @media screen and (max-width: 600px) {
-    font-size: 0.8rem;
-    padding: 0.3rem 2rem;
-  }
 `;
 
 export function Content({

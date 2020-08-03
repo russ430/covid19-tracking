@@ -1,12 +1,11 @@
 /* eslint-disable no-shadow */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as d3 from 'd3';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import useResizeObserver from '../../../../../utils/useResizeObserver';
 import ErrorModal from '../../../../ErrorModal';
 import bisect from '../../../../../utils/bisect';
 import {
@@ -22,16 +21,6 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const SvgContainer = styled.div`
-  height: 300px;
-  align-self: stretch;
-`;
-
-const Svg = styled.svg`
-  width: 100%;
-  height: 100%;
-`;
-
 const Title = styled.h2`
   font-family: 'Open Sans', sans-serif;
   font-size: 1.2rem;
@@ -39,10 +28,6 @@ const Title = styled.h2`
   text-align: center;
   margin: 0;
   padding: 0;
-
-  @media screen and (max-width: 650px) {
-    font-size: 0.9rem;
-  }
 `;
 
 const Updated = styled.h3`
@@ -54,11 +39,10 @@ const Updated = styled.h3`
   margin: 0;
   margin-bottom: -0.5rem;
   font-style: italic;
-
-  @media screen and (max-width: 650px) {
-    font-size: 0.7rem;
-  }
 `;
+
+const GRAPHHEIGHT = 300;
+const GRAPHWIDTH = 600;
 
 export function NewCasesGraph({
   barsKey,
@@ -73,12 +57,10 @@ export function NewCasesGraph({
   selectedState,
   storeDataFromCache,
 }) {
-  const svgContainerRef = useRef();
-  const dimensions = useResizeObserver(svgContainerRef);
   const formatNumber = d3.format(',');
   const margin = { top: 20, right: 0, bottom: 30, left: 20 };
-  const width = dimensions.width - margin.right - margin.left;
-  const height = dimensions.height - margin.top - margin.bottom;
+  const width = GRAPHWIDTH - margin.right - margin.left;
+  const height = GRAPHHEIGHT - margin.top - margin.bottom;
 
   const drawGraph = () => {
     const svg = d3.select('.svg-graph');
@@ -297,7 +279,7 @@ export function NewCasesGraph({
       drawGraph();
     }
     return () => clearSVG();
-  }, [data, dimensions, barsKey]);
+  }, [data, barsKey]);
 
   return (
     <Container>
@@ -310,9 +292,7 @@ export function NewCasesGraph({
       <Updated>
         *Last updated {format(new Date(lastUpdated), 'PPP @ p')}
       </Updated>
-      <SvgContainer ref={svgContainerRef}>
-        <Svg className="svg-graph" />
-      </SvgContainer>
+      <svg height={GRAPHHEIGHT} width={GRAPHWIDTH} className="svg-graph" />
     </Container>
   );
 }

@@ -9,18 +9,6 @@ import Sidebar from '../../Sidebars/components/Sidebar';
 
 const Container = styled.div`
   display: none;
-
-  @media screen and (max-width: 950px) {
-    display: block;
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #fff;
-    margin-top: 1.5rem;
-    width: 250px;
-    border: 1px solid #ddd;
-  }
 `;
 
 const State = styled.h3`
@@ -30,10 +18,6 @@ const State = styled.h3`
   font-size: 1rem;
   font-weight: 400;
   background-color: ${(props) => (props.selected ? '#eee' : '#fff')};
-
-  @media screen and (max-width: 650px) {
-    font-size: 0.8rem;
-  }
 `;
 
 export function StatesDropdown({

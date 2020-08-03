@@ -8,18 +8,10 @@ import Content from './components/Content/Content';
 const Container = styled.div`
   display: flex;
   margin: 1rem 0;
-
-  @media screen and (max-width: 900px) {
-    flex-direction: column-reverse;
-  }
 `;
 
 const Sidebars = styled.div`
   flex: 1;
-
-  @media screen and (max-width: 950px) {
-    display: none;
-  }
 `;
 
 export default function Main() {
