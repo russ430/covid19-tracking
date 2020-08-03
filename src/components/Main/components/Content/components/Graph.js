@@ -15,20 +15,16 @@ import {
   clearDailyDataError,
 } from '../../../../../redux/actions';
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 const SvgContainer = styled.div`
-  width: 600px;
   height: 300px;
-
-  @media screen and (max-width: 650px) {
-    width: 400px;
-    height: 250px;
-    margin: 0 auto;
-  }
-
-  @media screen and (max-width: 550px) {
-    width: 300px;
-    height: 200px;
-  }
+  align-self: stretch;
 `;
 
 const Svg = styled.svg`
@@ -63,9 +59,6 @@ const Updated = styled.h3`
     font-size: 0.7rem;
   }
 `;
-
-const GRAPHHEIGHT = 300;
-const GRAPHWIDTH = 600;
 
 export function NewCasesGraph({
   barsKey,
@@ -192,7 +185,7 @@ export function NewCasesGraph({
 
     // add x axis and label
     const xAxis = svg.append('g').attr('class', 'x-axis').call(createXAxis);
-    xAxis.selectAll('.tick', 'text').style('font-size', '0.8rem');
+    xAxis.selectAll('.tick', 'text').style('font-size', '0.7rem');
 
     // add legend
     svg
@@ -307,7 +300,7 @@ export function NewCasesGraph({
   }, [data, dimensions, barsKey]);
 
   return (
-    <div>
+    <Container>
       <ErrorModal visible={error} onClose={clearError}>
         Unable to retrieve data for{' '}
         {selectedState === 'all' ? 'the U.S' : meta[selectedState].name}. Please
@@ -320,7 +313,7 @@ export function NewCasesGraph({
       <SvgContainer ref={svgContainerRef}>
         <Svg className="svg-graph" />
       </SvgContainer>
-    </div>
+    </Container>
   );
 }
 
