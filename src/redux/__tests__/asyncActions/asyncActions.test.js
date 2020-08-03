@@ -29,6 +29,7 @@ describe('async actions', () => {
     store.clearActions();
   });
   it('creates GET_CURRENT_STATE_DATA_SUCCESS when fetching data has been done', () => {
+    const date = `${new Date('01-01-2020')}`;
     const data = [
       {
         state: 'MA',
@@ -37,18 +38,20 @@ describe('async actions', () => {
         totalTestResults: 1,
         hash: 1,
         positiveIncrease: 1,
+        lastUpdateEt: date,
       },
     ];
     mock.onGet(url.ALL_STATES_CURRENT_DATA).reply(200, data);
 
     const parsed = [
       {
-        hash: 1,
+        id: 1,
         totalCases: 1,
         deaths: 1,
         tests: 1,
         state: 'ma',
         newCases: 1,
+        lastUpdated: date,
       },
     ];
 
