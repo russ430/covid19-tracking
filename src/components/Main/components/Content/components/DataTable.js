@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { format } from 'd3';
 import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
 import PropTypes from 'prop-types';
+import { format as formatDate } from 'date-fns';
 
 import AboutData from './AboutData';
 import ErrorModal from '../../../../ErrorModal';
@@ -39,10 +40,13 @@ const Th = styled.th`
   text-decoration: ${(props) => (props.sorted ? 'underline' : null)};
 
   &:not(:first-child) {
-    padding-right: 1rem;
     text-align: right;
+    width: 15%;
+  }
+
+  &:not(:first-child):not(:last-child) {
+    padding-right: 1rem;
     cursor: pointer;
-    width: 18.75%;
     &:hover {
       text-decoration: underline;
     }
@@ -55,8 +59,12 @@ const Td = styled.td`
   font-size: 1rem;
   color: #111;
   text-transform: none;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0 0.5rem 1rem;
   width: 18.75%;
+
+  &:not(:last-child) {
+    padding-right: 1rem;
+  }
 `;
 
 const StateCell = styled(Td)`
@@ -67,7 +75,9 @@ const StateCell = styled(Td)`
 `;
 
 const StateText = styled.span`
+  font-family: 'Open Sans', sans-serif;
   cursor: pointer;
+  font-weight: 400;
 
   &:hover {
     text-decoration: underline;
@@ -200,9 +210,9 @@ export function DataTable({
                     ) : (
                       <TiArrowSortedDown />
                     ))}
-                  Daily Cases
+                  New Cases
                   <br />
-                  Increase
+                  Reported
                 </Th>
                 <Th
                   onClick={() => requestSort('deaths')}
@@ -231,11 +241,12 @@ export function DataTable({
                   Tests <br />
                   Administered
                 </Th>
+                <Th style={{ paddingLeft: '1rem' }}>Last Updated</Th>
               </Row>
             </thead>
             <tbody>
               {filterTable().map((state) => (
-                <Row key={state.hash}>
+                <Row key={state.id}>
                   <StateCell>
                     <StateText onClick={() => setSelectedState(state.state)}>
                       {meta[state.state].name}
@@ -245,11 +256,12 @@ export function DataTable({
                   <Td>{formatNumber(state.newCases)}</Td>
                   <Td>{formatNumber(state.deaths)}</Td>
                   <Td>{formatNumber(state.tests)}</Td>
+                  <Td>{formatDate(new Date(state.lastUpdated), 'M/d')}</Td>
                 </Row>
               ))}
               {filterConfig.type !== 'search' && (
                 <Row>
-                  <Show colSpan="5">
+                  <Show colSpan="6">
                     <StateText
                       onClick={() =>
                         setFilterConfig((prev) =>
