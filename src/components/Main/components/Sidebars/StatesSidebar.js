@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { range as d3range } from 'd3';
+import { TiArrowSortedUp } from 'react-icons/ti';
 
 import ErrorModal from '../../../ErrorModal';
 import Sidebar from './components/Sidebar';
@@ -34,9 +35,11 @@ const Line = styled.div`
 `;
 
 const State = styled.h3`
+  display: flex;
+  align-items: center;
   font-size: 1rem;
   font-family: 'Open Sans', sans-serif;
-  text-decoration: ${(props) => (props.selected ? 'underline' : null)};
+  font-weight: ${(props) => (props.selected ? '700' : '400')};
   padding: 0;
   margin: 0.5rem 0;
   cursor: pointer;
@@ -45,6 +48,13 @@ const State = styled.h3`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+const Arrow = styled(TiArrowSortedUp)`
+  transform: rotate(90deg);
+  color: ${(props) => (props.selected ? '#000' : '#fff')};
+  vertical-align: middle;
+  margin-right: 0.1rem;
 `;
 
 export function StatesSidebar({
@@ -78,6 +88,7 @@ export function StatesSidebar({
               selected={selected === 'all'}
               onClick={() => handleOnClickState('all')}
             >
+              <Arrow selected={selected === 'all'} />
               US Totals
             </State>
             {Object.keys(meta)
@@ -88,6 +99,7 @@ export function StatesSidebar({
                   key={meta[state].id}
                   onClick={() => handleOnClickState(state)}
                 >
+                  <Arrow selected={selected === state} />
                   {meta[state].name}
                 </State>
               ))}

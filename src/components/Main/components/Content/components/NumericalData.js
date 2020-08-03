@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { format } from 'd3';
 
 const Container = styled.div`
-  margin: 0 0 1rem 0;
+  margin: 0 0 1rem 1rem;
 `;
 
 const DataContainer = styled.div`
@@ -16,6 +16,10 @@ const DataContainer = styled.div`
 
 const DataGroup = styled.div`
   margin: 0;
+
+  &:not(:last-child) {
+    margin-bottom: 0.75rem;
+  }
 `;
 
 const Label = styled.h2`
