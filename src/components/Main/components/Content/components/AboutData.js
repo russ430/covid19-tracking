@@ -8,6 +8,7 @@ const Container = styled.div`
 
   @media screen and (max-width: 600px) {
     width: 100%;
+    margin: 0.5rem 0;
   }
 `;
 
@@ -22,6 +23,10 @@ const Header = styled.h3`
   text-decoration: underline;
   margin-left: 0.1rem;
   cursor: pointer;
+
+  @media screen and (max-width: 450px) {
+    font-size: 0.6rem;
+  }
 `;
 
 const Caption = styled.p`
@@ -30,6 +35,10 @@ const Caption = styled.p`
   font-size: 0.8rem;
   color: #909090;
   margin-left: 1rem;
+
+  @media screen and (max-width: 450px) {
+    font-size: 0.6rem;
+  }
 `;
 
 export default function AboutData({ children }) {

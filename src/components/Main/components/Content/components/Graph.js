@@ -41,7 +41,7 @@ const Title = styled.h2`
   padding: 0;
 
   @media screen and (max-width: 650px) {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 `;
 
@@ -81,6 +81,7 @@ export function NewCasesGraph({
   const height = dimensions.height - margin.top - margin.bottom;
 
   const drawGraph = () => {
+    console.log(dimensions);
     const svg = d3.select('.svg-graph');
     const barScale = d3
       .scaleBand()

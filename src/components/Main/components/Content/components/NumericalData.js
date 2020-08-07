@@ -10,6 +10,10 @@ const Container = styled.div`
   @media screen and (max-width: 1150px) {
     margin-bottom: 3rem;
   }
+
+  @media screen and (max-width: 500px) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const DataContainer = styled.div`

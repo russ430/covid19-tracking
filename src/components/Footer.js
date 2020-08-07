@@ -6,6 +6,10 @@ const Container = styled.div`
   text-align: center;
   max-width: 600px;
   padding: 0 0.5rem;
+
+  @media screen and (max-width: 500px) {
+    padding: 0 1rem;
+  }
 `;
 
 const Text = styled.p`
@@ -17,6 +21,14 @@ const Text = styled.p`
 
   a {
     color: #909090;
+  }
+
+  @media screen and (max-width: 650px) {
+    font-size: 0.7rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 0.6rem;
   }
 `;
 

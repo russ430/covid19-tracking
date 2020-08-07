@@ -23,7 +23,6 @@ const Container = styled.section`
 
   @media screen and (max-width: 950px) {
     flex: 1;
-    margin: 0 1rem;
   }
 `;
 
@@ -100,6 +99,18 @@ const Button = styled.button`
   @media screen and (max-width: 600px) {
     font-size: 0.8rem;
     padding: 0.3rem 2rem;
+  }
+`;
+
+const DataTableSection = styled.div`
+  margin: 0 auto;
+  margin-top: 1rem;
+  padding: 1rem 0;
+  max-width: 900px;
+
+  @media screen and (max-width: 500px) {
+    margin-top: 0;
+    padding: 0 0 1rem 0;
   }
 `;
 
@@ -180,17 +191,10 @@ export function Content({
         </div>
         <NumericalData />
       </GraphAndNumbers>
-      <div
-        style={{
-          margin: '0 auto',
-          marginTop: '1rem',
-          padding: '1rem 0',
-          maxWidth: '900px',
-        }}
-      >
+      <DataTableSection>
         <SecondaryTitle>Cases and Deaths by State</SecondaryTitle>
         <DataTable />
-      </div>
+      </DataTableSection>
     </Container>
   );
 }
