@@ -18,7 +18,6 @@ import NumericalData from './components/NumericalData';
 
 const Container = styled.section`
   padding: 0 0.5rem;
-  margin: 0 auto;
   flex: 4.5;
 
   @media screen and (max-width: 950px) {

@@ -19,6 +19,7 @@ const Sidebars = styled.div`
 
   @media screen and (max-width: 950px) {
     display: none;
+    flex: 0;
   }
 `;
 
