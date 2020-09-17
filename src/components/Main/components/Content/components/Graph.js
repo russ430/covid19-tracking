@@ -81,13 +81,12 @@ export function NewCasesGraph({
   const height = dimensions.height - margin.top - margin.bottom;
 
   const drawGraph = () => {
-    console.log(dimensions);
     const svg = d3.select('.svg-graph');
-    const barScale = d3
-      .scaleBand()
-      .domain(d3.range(data.length))
-      .range([margin.left, width - margin.right])
-      .padding(0.2);
+    // const barScale = d3
+    //   .scaleBand()
+    //   .domain(d3.range(data.length))
+    //   .range([margin.left, width - margin.right])
+    //   .padding(0.2);
 
     const yScale = d3
       .scaleLinear()
@@ -100,19 +99,19 @@ export function NewCasesGraph({
       .domain(d3.extent(data, (d) => new Date(d.date)))
       .range([margin.left, width - margin.right]);
 
-    // create bars
-    svg
-      .selectAll('rect')
-      .data(data)
-      .join('rect')
-      .style('transform', 'scale(1, -1)')
-      .attr('class', (d) => `${d.hash}`)
-      .attr('x', (d, i) => barScale(i))
-      .attr('y', () => -height + margin.bottom)
-      .attr('width', barScale.bandwidth())
-      .style('fill', 'lightblue')
-      .transition()
-      .attr('height', (d) => yScale(0) - yScale(d[barsKey]));
+    // // create bars
+    // svg
+    //   .selectAll('rect')
+    //   .data(data)
+    //   .join('rect')
+    //   .style('transform', 'scale(1, -1)')
+    //   .attr('class', (d) => `${d.hash}`)
+    //   .attr('x', (d, i) => barScale(i))
+    //   .attr('y', () => -height + margin.bottom)
+    //   .attr('width', barScale.bandwidth())
+    //   .style('fill', 'lightblue')
+    //   .transition()
+    //   .attr('height', (d) => yScale(0) - yScale(d[barsKey]));
 
     const line = d3
       .line()
