@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import * as d3 from 'd3';
 import { format } from 'date-fns';
@@ -73,20 +73,21 @@ export function NewCasesGraph({
   selectedState,
   storeDataFromCache,
 }) {
-  const svgContainerRef = useRef();
+  const svgContainerRef = useRef(null);
+  const svgRef = useRef(null);
   const dimensions = useResizeObserver(svgContainerRef);
   const formatNumber = d3.format(',');
-  const margin = { top: 20, right: 0, bottom: 30, left: 20 };
+  const margin = { top: 20, right: 30, bottom: 30, left: 20 };
   const width = dimensions.width - margin.right - margin.left;
   const height = dimensions.height - margin.top - margin.bottom;
 
   const drawGraph = () => {
-    const svg = d3.select('.svg-graph');
-    // const barScale = d3
-    //   .scaleBand()
-    //   .domain(d3.range(data.length))
-    //   .range([margin.left, width - margin.right])
-    //   .padding(0.2);
+    const svg = d3.select(svgRef.current);
+    const barScale = d3
+      .scaleBand()
+      .domain(d3.range(data.length))
+      .range([margin.left, width - margin.right])
+      .padding(0.2);
 
     const yScale = d3
       .scaleLinear()
@@ -99,19 +100,19 @@ export function NewCasesGraph({
       .domain(d3.extent(data, (d) => new Date(d.date)))
       .range([margin.left, width - margin.right]);
 
-    // // create bars
-    // svg
-    //   .selectAll('rect')
-    //   .data(data)
-    //   .join('rect')
-    //   .style('transform', 'scale(1, -1)')
-    //   .attr('class', (d) => `${d.hash}`)
-    //   .attr('x', (d, i) => barScale(i))
-    //   .attr('y', () => -height + margin.bottom)
-    //   .attr('width', barScale.bandwidth())
-    //   .style('fill', 'lightblue')
-    //   .transition()
-    //   .attr('height', (d) => yScale(0) - yScale(d[barsKey]));
+    // create bars
+    svg
+      .selectAll('rect')
+      .data(data)
+      .join('rect')
+      .style('transform', 'scale(1, -1)')
+      .attr('class', (d) => `${d.hash}`)
+      .attr('x', (d, i) => barScale(i))
+      .attr('y', () => -height + margin.bottom)
+      .attr('width', barScale.bandwidth())
+      .style('fill', 'lightblue')
+      .transition()
+      .attr('height', (d) => yScale(0) - yScale(d[barsKey]));
 
     const line = d3
       .line()
@@ -271,7 +272,8 @@ export function NewCasesGraph({
   };
 
   const clearSVG = () => {
-    const svg = d3.select('.svg-graph');
+    if (!svgRef) return;
+    const svg = d3.select(svgRef.current);
     svg.select('.y-axis').remove();
     svg.select('.x-axis').remove();
     svg.select('.y-axis-label').remove();
@@ -291,13 +293,13 @@ export function NewCasesGraph({
     }
   }, [selectedState]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (data) {
       sessionStorage.setItem(selectedState, JSON.stringify(data));
       drawGraph();
     }
     return () => clearSVG();
-  }, [data, dimensions, barsKey]);
+  }, [data, barsKey]);
 
   return (
     <Container>
@@ -311,7 +313,7 @@ export function NewCasesGraph({
         *Last updated {format(new Date(lastUpdated), 'PPP @ p')}
       </Updated>
       <SvgContainer ref={svgContainerRef}>
-        <Svg className="svg-graph" />
+        <Svg ref={svgRef} />
       </SvgContainer>
     </Container>
   );
